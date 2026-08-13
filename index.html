@@ -480,6 +480,75 @@ img { max-width: 100%; display: block; }
 }
 
 /* ---------------------------------------------------------
+   FEATURED FILM
+   --------------------------------------------------------- */
+.feature {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: clamp(26px, 4vw, 58px);
+  align-items: center;
+}
+@media (max-width: 900px) { .feature { grid-template-columns: 1fr; } }
+
+.feature__frame {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: var(--shot, var(--ink-raised));
+  background-size: cover;
+  background-position: center;
+  border: var(--rule);
+  overflow: hidden;
+}
+.feature__frame:hover .feature__play { transform: translate(-50%, -50%) scale(1.07); }
+.feature__scrim { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(6,7,6,0) 0 58%, rgba(6,7,6,.74)); }
+.feature__play {
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 72px; height: 72px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: var(--matcha);
+  display: grid; place-items: center;
+  box-shadow: 0 12px 34px rgba(0,0,0,.6);
+  transition: transform .22s ease;
+}
+.feature__play::after {
+  content: "";
+  border-left: 20px solid var(--ink-deep);
+  border-block: 12px solid transparent;
+  margin-left: 5px;
+}
+.feature__views {
+  position: absolute; top: 14px; left: 14px;
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(6,7,6,.76);
+  border: 1px solid rgba(168,201,59,.32);
+  font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--matcha);
+}
+.feature__strap {
+  position: absolute; left: 16px; right: 16px; bottom: 14px;
+  font-family: var(--mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--cream-dim);
+  text-shadow: 0 1px 10px rgba(6,7,6,.95);
+}
+.feature__meta { display: grid; gap: 18px; justify-items: start; }
+.feature__meta h2 { font-size: clamp(28px, 3.6vw, 44px); }
+.feature__meta p { color: var(--muted); font-size: 15.5px; max-width: 40ch; }
+.feature__price {
+  display: flex; align-items: baseline; gap: 12px;
+  font-family: var(--display); font-weight: 800; letter-spacing: -0.02em;
+  font-size: 30px; color: var(--matcha); font-variant-numeric: tabular-nums;
+}
+.feature__price small {
+  font-family: var(--mono); font-weight: 400; font-size: 10px;
+  letter-spacing: .14em; text-transform: uppercase; color: var(--muted-deep);
+}
+.feature__acts { display: flex; flex-wrap: wrap; gap: 12px; }
+
+/* ---------------------------------------------------------
    COLLECTION
    --------------------------------------------------------- */
 .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(20px, 2.6vw, 34px) clamp(18px, 2.2vw, 30px); }
@@ -770,6 +839,33 @@ img { max-width: 100%; display: block; }
   <div class="ticker" aria-hidden="true">
     <div class="ticker__track" id="ticker"></div>
   </div>
+
+  <!-- FEATURED FILM --------------------------------------- -->
+  <section class="band" id="featured">
+    <div class="shell">
+      <div class="feature rise">
+        <a class="feature__frame" id="featureFrame" href="#" target="_blank" rel="noopener" aria-label="Watch this film on YouTube">
+          <span class="feature__scrim"></span>
+          <span class="feature__views" id="featureViews"></span>
+          <span class="feature__play" aria-hidden="true"></span>
+          <span class="feature__strap" id="featureStrap"></span>
+        </a>
+        <div class="feature__meta">
+          <span class="label label--go">This week's film</span>
+          <h2 class="hd" id="featureTitle"></h2>
+          <p id="featureBlurb"></p>
+          <div class="feature__price">
+            <span id="featurePrice"></span>
+            <small id="featureSpec"></small>
+          </div>
+          <div class="feature__acts">
+            <button class="btn btn--solid" id="featureAdd">Order this one</button>
+            <a class="btn btn--ghost" id="featureWatch" href="#" target="_blank" rel="noopener">Watch the film</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- COLLECTION ------------------------------------------ -->
   <section class="band" id="collection">
@@ -1247,6 +1343,24 @@ img { max-width: 100%; display: block; }
     }
   ];
 
+  /* ------------------------------------------------------
+     THE FEATURED FILM
+     Point `cake` at whichever id in CAKES the film is about,
+     and put the film's own title in `title`. Everything on
+     the feature block — art, price, spec, order button —
+     follows from the cake it names.
+     ------------------------------------------------------ */
+  var FEATURE = {
+    cake: "strawberry-matcha",
+    title: "Strawberry mousse, poured into a matcha shell",
+    blurb:
+      "The one everybody sends to a friend. Strawberry mousse goes into a " +
+      "matcha chiffon shell, the mirror goes over the top, and the whole " +
+      "thing gets cut open at the end.",
+    strap: "Watch it, then order it",
+    url: "https://www.youtube.com/watch?v=-uyI0TjhXdk"
+  };
+
   var FILMS = [
     { title: "Strawberry into the matcha shell", views: "1.8M views", photo: "", tone: CAKES[0].tone },
     { title: "Matcha &amp; Pistachio Choc-Shell", views: "580K views", photo: "", tone: CAKES[1].tone },
@@ -1313,6 +1427,39 @@ img { max-width: 100%; display: block; }
 
     grid.appendChild(tile);
   });
+
+  /* ------------------------------------------------------
+     Featured film
+     ------------------------------------------------------ */
+  var star = null;
+  CAKES.forEach(function (c) { if (c.id === FEATURE.cake) { star = c; } });
+
+  if (star) {
+    var starTone = star.tone || star;
+    var frameEl = el("featureFrame");
+    if (star.photo) {
+      frameEl.style.setProperty("--shot", "url('" + star.photo + "')");
+    } else {
+      frameEl.insertAdjacentHTML("afterbegin", draw(
+        Object.assign({}, starTone, { grow: 35 }), 31
+      ));
+    }
+    frameEl.href = FEATURE.url;
+    el("featureWatch").href = FEATURE.url;
+    el("featureViews").textContent = star.views;
+    el("featureStrap").textContent = FEATURE.strap;
+    el("featureTitle").innerHTML = FEATURE.title;
+    el("featureBlurb").textContent = FEATURE.blurb;
+    el("featurePrice").textContent = money(star.price);
+    el("featureSpec").textContent = star.spec;
+
+    el("featureAdd").addEventListener("click", function () {
+      var btn = this;
+      add({ key: star.id, name: star.name, meta: star.spec, price: star.price, art: chip(starTone) });
+      btn.textContent = "In your box";
+      window.setTimeout(function () { btn.textContent = "Order this one"; }, 1600);
+    });
+  }
 
   /* ------------------------------------------------------
      Studio strip
