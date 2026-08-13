@@ -1,0 +1,347 @@
+/**
+ * CRITICAL CSS FIXES
+ * Resolves pseudo-element conflicts and adds accessibility/compatibility improvements
+ */
+
+/* ============================================================
+   1. PSEUDO-ELEMENT CONFLICT RESOLUTION
+   Use unique class names instead of generic ::before/::after
+   ============================================================ */
+
+/* Rename conflicting proximity lighting effects */
+.tile__proximity-glow::before,
+.voice__proximity-glow::before,
+.step__proximity-glow::before,
+.film__proximity-glow::before,
+.feature__proximity-glow::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: inherit;
+  background: radial-gradient(
+    var(--card-glow-size, 600px) circle at var(--cursor-x, 50%) var(--cursor-y, 50%),
+    rgba(168, 201, 59, 0.18),
+    rgba(168, 201, 59, 0.08) 30%,
+    transparent 70%
+  );
+  opacity: var(--card-glow-opacity, 0);
+  transition: var(--card-glow-transition, opacity 0.3s ease);
+  pointer-events: none;
+  z-index: 1;
+  mix-blend-mode: screen;
+}
+
+/* Rename tile shot glow to avoid animation.css conflict */
+.tile__shot-cursor-glow::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    400px circle at var(--cursor-x, 50%) var(--cursor-y, 50%),
+    rgba(168, 201, 59, 0.15),
+    transparent 60%
+  );
+  opacity: var(--card-glow-opacity, 0);
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+  z-index: 2;
+}
+
+/* Gamification view marker (distinct from other effects) */
+.tile__viewed-marker {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--matcha);
+  opacity: 0;
+  transform: scale(0);
+  transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  z-index: 10;
+  pointer-events: none;
+}
+
+.tile__viewed-marker.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ============================================================
+   2. ACCESSIBILITY CURSOR FALLBACKS
+   ============================================================ */
+
+/* Restore default cursor for accessibility modes */
+@media (prefers-reduced-motion: reduce), (forced-colors: active) {
+  body {
+    cursor: auto !important;
+  }
+
+  .cursor,
+  .cursor-ring {
+    display: none !important;
+    opacity: 0 !important;
+  }
+
+  /* Disable all transform animations */
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High contrast mode cursor visibility */
+@media (forced-colors: active) {
+  button,
+  a,
+  .chip,
+  .tile {
+    outline: 2px solid transparent;
+  }
+
+  button:hover,
+  a:hover,
+  .chip:hover,
+  .tile:hover {
+    outline-color: currentColor;
+  }
+}
+
+/* ============================================================
+   3. WEBKIT PREFIXES FOR BROWSER COMPATIBILITY
+   ============================================================ */
+
+.masthead {
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.tile__views {
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+.drawer {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.scrim {
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+
+.glass-cursor {
+  backdrop-filter: blur(var(--glass-blur-amount, 14px));
+  -webkit-backdrop-filter: blur(var(--glass-blur-amount, 14px));
+}
+
+/* ============================================================
+   4. MOBILE RESPONSIVENESS FIXES
+   ============================================================ */
+
+/* Achievement tracker wrapping fix */
+@media (max-width: 900px) {
+  .achievement-tracker {
+    position: static !important;
+    margin: 16px auto;
+    justify-content: center;
+  }
+}
+
+/* Configurator progress on small screens */
+@media (max-width: 380px) {
+  .progress-indicator {
+    padding: 12px;
+    gap: 8px;
+  }
+
+  .progress-step {
+    width: 24px;
+    height: 24px;
+    font-size: 10px;
+  }
+
+  .progress-bar {
+    height: 2px;
+  }
+}
+
+/* Toast notifications mobile positioning */
+@media (max-width: 640px) {
+  .achievement-toast,
+  .toast-notification {
+    top: auto !important;
+    bottom: 80px;
+    left: 16px;
+    right: 16px;
+    width: auto;
+    max-width: none;
+    animation-duration: 2s !important;
+  }
+}
+
+/* Achievement panel scroll fix */
+.achievement-panel {
+  max-height: min(80vh, 600px);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-height: 600px) {
+  .achievement-panel {
+    max-height: 70vh;
+  }
+
+  .achievement-item {
+    padding: 12px;
+  }
+}
+
+/* ============================================================
+   5. PERFORMANCE OPTIMIZATIONS
+   ============================================================ */
+
+/* CSS Containment for better paint performance */
+.tile,
+.film,
+.voice,
+.step {
+  contain: layout style paint;
+}
+
+.tile__shot,
+.film,
+.feature__frame {
+  contain: layout paint;
+}
+
+/* Reduce will-change usage (browser will optimize automatically) */
+.tile,
+.btn,
+.chip {
+  will-change: auto;
+}
+
+/* Only apply will-change during interaction */
+.tile:hover,
+.btn:hover,
+.chip:hover {
+  will-change: transform, box-shadow;
+}
+
+.tile:not(:hover),
+.btn:not(:hover),
+.chip:not(:hover) {
+  will-change: auto;
+}
+
+/* ============================================================
+   6. LAYER REVEAL KEYBOARD ACCESSIBILITY
+   ============================================================ */
+
+/* Show layer reveal button on focus-within */
+.layer-reveal-btn {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  cursor: pointer;
+}
+
+.tile__shot:hover .layer-reveal-btn,
+.tile__shot:focus-within .layer-reveal-btn {
+  opacity: 1;
+}
+
+/* Focus ring for keyboard navigation */
+.layer-reveal-btn:focus-visible {
+  outline: 2px solid var(--matcha);
+  outline-offset: 4px;
+}
+
+/* ============================================================
+   7. VARIABLE FONT FALLBACKS
+   ============================================================ */
+
+/* Fallback weights for browsers without variable font support */
+@supports not (font-variation-settings: normal) {
+  .hd,
+  .brand__name {
+    font-weight: 800 !important;
+  }
+
+  .btn,
+  body {
+    font-weight: 400 !important;
+  }
+
+  .label {
+    font-weight: 500 !important;
+  }
+}
+
+/* ============================================================
+   8. PRINT STYLES (ACCESSIBILITY)
+   ============================================================ */
+
+@media print {
+  /* Hide interactive-only elements */
+  .cursor,
+  .cursor-ring,
+  .achievement-tracker,
+  .progress-indicator,
+  .layer-reveal-btn,
+  .toast-notification {
+    display: none !important;
+  }
+
+  /* Show all content (no hidden reveals) */
+  .rise {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  /* Remove animations */
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ============================================================
+   9. SAFARI-SPECIFIC FIXES
+   ============================================================ */
+
+@supports (-webkit-hyphens: none) {
+  /* Safari scrollbar styling */
+  .achievement-panel::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .achievement-panel::-webkit-scrollbar-track {
+    background: var(--ink-raised);
+  }
+
+  .achievement-panel::-webkit-scrollbar-thumb {
+    background: var(--line);
+    border-radius: 4px;
+  }
+
+  .achievement-panel::-webkit-scrollbar-thumb:hover {
+    background: var(--muted-deep);
+  }
+}
+
+/* ============================================================
+   10. FIREFOX-SPECIFIC FIXES
+   ============================================================ */
+
+@-moz-document url-prefix() {
+  /* Firefox scrollbar styling */
+  .achievement-panel {
+    scrollbar-width: thin;
+    scrollbar-color: var(--line) var(--ink-raised);
+  }
+}
