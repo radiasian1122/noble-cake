@@ -1273,6 +1273,8 @@ select {
 
 .cursor {
   position: fixed;
+  top: 0;
+  left: 0;
   width: 12px;
   height: 12px;
   border-radius: 50%;
@@ -1280,8 +1282,7 @@ select {
   pointer-events: none;
   z-index: 99999;
   mix-blend-mode: normal;
-  transform: translate(-50%, -50%);
-  transition: width 0.2s ease, height 0.2s ease, opacity 0.2s ease, background 0.2s ease;
+  transition: width 0.2s ease, height 0.2s ease, background 0.2s ease;
   opacity: 1;
   will-change: transform;
 }
@@ -1294,16 +1295,16 @@ select {
 
 .cursor-ring {
   position: fixed;
+  top: 0;
+  left: 0;
   width: 40px;
   height: 40px;
   border: 1px solid var(--matcha);
   border-radius: 50%;
   pointer-events: none;
   z-index: 99998;
-  transform: translate(-50%, -50%);
   transition: width 0.3s cubic-bezier(0.16, 0.84, 0.44, 1),
-              height 0.3s cubic-bezier(0.16, 0.84, 0.44, 1),
-              opacity 0.2s ease;
+              height 0.3s cubic-bezier(0.16, 0.84, 0.44, 1);
   opacity: 0.5;
   will-change: transform;
 }
@@ -2936,11 +2937,9 @@ select {
     var ringX = mouseX;
     var ringY = mouseY;
 
-    // Initialize position
-    cursor.style.left = cursorX + "px";
-    cursor.style.top = cursorY + "px";
-    cursorRing.style.left = ringX + "px";
-    cursorRing.style.top = ringY + "px";
+    // Initialize position with transform (centers cursor on point)
+    cursor.style.transform = "translate(" + (cursorX - 6) + "px, " + (cursorY - 6) + "px)";
+    cursorRing.style.transform = "translate(" + (ringX - 20) + "px, " + (ringY - 20) + "px)";
 
     document.addEventListener("mousemove", function (e) {
       mouseX = e.clientX;
@@ -2951,15 +2950,18 @@ select {
     }, { passive: true });
 
     function animateCursor() {
+      // Smooth easing
       cursorX += (mouseX - cursorX) * 0.25;
       cursorY += (mouseY - cursorY) * 0.25;
-      cursor.style.left = cursorX + "px";
-      cursor.style.top = cursorY + "px";
+
+      // Position cursor centered on point (12px / 2 = 6px offset)
+      cursor.style.transform = "translate(" + (cursorX - 6) + "px, " + (cursorY - 6) + "px)";
 
       ringX += (mouseX - ringX) * 0.12;
       ringY += (mouseY - ringY) * 0.12;
-      cursorRing.style.left = ringX + "px";
-      cursorRing.style.top = ringY + "px";
+
+      // Position ring centered on point (40px / 2 = 20px offset)
+      cursorRing.style.transform = "translate(" + (ringX - 20) + "px, " + (ringY - 20) + "px)";
 
       requestAnimationFrame(animateCursor);
     }
