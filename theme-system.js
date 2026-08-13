@@ -44,8 +44,8 @@
         return prefersDark ? this.THEMES.DARK : this.THEMES.LIGHT;
       }
 
-      // 3. Default to dark
-      return this.THEMES.DARK;
+      // 3. Default to light
+      return this.THEMES.LIGHT;
     },
 
     // ============================================================

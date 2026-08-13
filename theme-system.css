@@ -5,11 +5,72 @@
 
 /* ============================================================
    THEME COLOR TOKENS
-   Dark mode (default) and Light mode variants
+   Light mode (default) and Dark mode variants
    ============================================================ */
 
 :root {
-  /* Dark theme colors (default) */
+  /* Light theme colors (default) */
+  --ink:        #F8F9F6;  /* Light background */
+  --ink-deep:   #FFFFFF;  /* Brightest surface */
+  --ink-raised: #F1F3EE;  /* Elevated surface */
+  --ink-lift:   #E8EBE4;  /* Hover surface */
+  --line:       #D4D8CE;  /* Border */
+  --line-soft:  #E1E4DC;  /* Soft border */
+
+  --cream:      #1A1C18;  /* Dark text */
+  --cream-dim:  #3F4339;  /* Secondary text */
+  --muted:      #6B7266;  /* Tertiary text */
+  --muted-deep: #8A9085;  /* Muted text */
+
+  --matcha:     #8BAB2D;  /* Slightly darker for contrast */
+  --matcha-lit: #A8C93B;  /* Brighter state */
+  --matcha-dark: #6E8A1F; /* Darker state */
+  --berry:      #D96D83;
+  --mango:      #E89630;
+  --cocoa:      #3D2620;
+  --blueberry:  #6A4C7A;
+
+  /* Semantic tokens (theme-aware) */
+  --bg-base:      var(--ink);
+  --bg-elevated:  var(--ink-deep);
+  --bg-sunken:    var(--ink-raised);
+  --bg-hover:     var(--ink-lift);
+
+  --text-primary:   var(--cream);
+  --text-secondary: var(--cream-dim);
+  --text-tertiary:  var(--muted);
+  --text-inverse:   var(--ink-deep);
+
+  --border-default: var(--line);
+  --border-soft:    var(--line-soft);
+
+  --accent-primary:   var(--matcha);
+  --accent-bright:    var(--matcha-lit);
+  --accent-dark:      var(--matcha-dark);
+
+  /* Shadow system */
+  --shadow-sm:  0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-md:  0 4px 16px rgba(0, 0, 0, 0.12);
+  --shadow-lg:  0 12px 32px rgba(0, 0, 0, 0.16);
+  --shadow-xl:  0 24px 48px rgba(0, 0, 0, 0.20);
+
+  /* Gradient overlays */
+  --gradient-overlay-start: rgba(255, 255, 255, 0);
+  --gradient-overlay-end:   rgba(248, 249, 246, 0.92);
+
+  /* Theme transition */
+  --theme-transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                      color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                      border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                      box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================================
+   DARK MODE THEME
+   ============================================================ */
+
+[data-theme="dark"] {
+  /* Dark mode base colors */
   --ink:        #0A0C0A;
   --ink-deep:   #060706;
   --ink-raised: #131611;
@@ -30,7 +91,7 @@
   --cocoa:      #3D2620;
   --blueberry:  #7A5F8E;
 
-  /* Semantic tokens (theme-aware) */
+  /* Semantic tokens update automatically */
   --bg-base:      var(--ink);
   --bg-elevated:  var(--ink-raised);
   --bg-sunken:    var(--ink-deep);
@@ -44,73 +105,15 @@
   --border-default: var(--line);
   --border-soft:    var(--line-soft);
 
-  --accent-primary:   var(--matcha);
-  --accent-bright:    var(--matcha-lit);
-  --accent-dark:      var(--matcha-dark);
-
-  /* Shadow system */
+  /* Dark mode shadows */
   --shadow-sm:  0 2px 8px rgba(0, 0, 0, 0.3);
   --shadow-md:  0 4px 16px rgba(0, 0, 0, 0.4);
   --shadow-lg:  0 12px 32px rgba(0, 0, 0, 0.5);
   --shadow-xl:  0 24px 48px rgba(0, 0, 0, 0.6);
 
-  /* Gradient overlays */
+  /* Dark gradient overlays */
   --gradient-overlay-start: rgba(6, 7, 6, 0);
   --gradient-overlay-end:   rgba(6, 7, 6, 0.88);
-
-  /* Theme transition */
-  --theme-transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-                      color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-                      border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-                      box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* ============================================================
-   LIGHT MODE THEME
-   ============================================================ */
-
-[data-theme="light"] {
-  /* Light mode base colors */
-  --ink:        #F8F9F6;  /* Light background */
-  --ink-deep:   #FFFFFF;  /* Brightest surface */
-  --ink-raised: #F1F3EE;  /* Elevated surface */
-  --ink-lift:   #E8EBE4;  /* Hover surface */
-  --line:       #D4D8CE;  /* Border */
-  --line-soft:  #E1E4DC;  /* Soft border */
-
-  --cream:      #1A1C18;  /* Dark text */
-  --cream-dim:  #3F4339;  /* Secondary text */
-  --muted:      #6B7266;  /* Tertiary text */
-  --muted-deep: #8A9085;  /* Muted text */
-
-  /* Matcha stays vibrant but slightly adjusted for light bg */
-  --matcha:     #8BAB2D;  /* Slightly darker for contrast */
-  --matcha-lit: #A8C93B;  /* Brighter state */
-  --matcha-dark: #6E8A1F; /* Darker state */
-
-  /* Semantic tokens update automatically */
-  --bg-base:      var(--ink);
-  --bg-elevated:  var(--ink-deep);
-  --bg-sunken:    var(--ink-raised);
-  --bg-hover:     var(--ink-lift);
-
-  --text-primary:   var(--cream);
-  --text-secondary: var(--cream-dim);
-  --text-tertiary:  var(--muted);
-  --text-inverse:   var(--ink-deep);
-
-  --border-default: var(--line);
-  --border-soft:    var(--line-soft);
-
-  /* Light mode shadows */
-  --shadow-sm:  0 2px 8px rgba(0, 0, 0, 0.08);
-  --shadow-md:  0 4px 16px rgba(0, 0, 0, 0.12);
-  --shadow-lg:  0 12px 32px rgba(0, 0, 0, 0.16);
-  --shadow-xl:  0 24px 48px rgba(0, 0, 0, 0.20);
-
-  /* Light gradient overlays */
-  --gradient-overlay-start: rgba(255, 255, 255, 0);
-  --gradient-overlay-end:   rgba(248, 249, 246, 0.92);
 }
 
 /* ============================================================
