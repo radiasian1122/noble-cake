@@ -1,0 +1,1734 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Noble Cake</title>
+<meta name="description" content="Noble Cake — matcha lava, choc-shell and chiffon cakes from the ASMR baking channel. Baked to order, shipped chilled. Est. 2017." />
+
+<!--
+  ============================================================
+  NOBLE CAKE — storefront concept
+  ============================================================
+  Built from the @NOBLE-CAKE channel: ASMR Baking & Cake
+  Decorating, est. 2017, 112 videos, 29.9K subscribers.
+
+  TWO THINGS TO SWAP BEFORE THIS GOES LIVE
+
+  1. THE LOGO. The seal in the header and footer is redrawn in
+     SVG from the channel avatar. Replace the whole <svg> inside
+     .seal with the real logo file:
+         <img src="images/noble-cake-seal.png" alt="" />
+
+  2. THE PHOTOS. Every cake is drawn in CSS until real
+     photography is in. Each entry in the CAKES list has a
+     photo field:
+         photo: ""                      <- drawn in CSS
+         photo: "images/matcha.jpg"     <- uses your photo
+     The drawing steps aside and the photo gets cropped and
+     scrimmed automatically. Best crop: 4:5 portrait.
+     Same field on the FILMS list for the studio strip.
+
+  Cake names and view counts are real, taken from the channel.
+  Prices, lead times and quotes are placeholders.
+  ============================================================
+-->
+
+<style>
+/* ---------------------------------------------------------
+   TOKENS
+   One committed world: a near-black biased green, lit by the
+   matcha, strawberry and dark chocolate that run through the
+   channel. Every colour is painted explicitly so the page
+   holds on any background.
+   --------------------------------------------------------- */
+:root {
+  --ink:        #0A0C0A;
+  --ink-deep:   #060706;
+  --ink-raised: #131611;
+  --ink-lift:   #1B1F18;
+  --line:       #262B23;
+  --line-soft:  #1D211B;
+
+  --cream:      #F1F1E7;
+  --cream-dim:  #CBCFC0;
+  --muted:      #8D958A;
+  --muted-deep: #676F60;
+
+  --matcha:     #A8C93B;
+  --matcha-lit: #BCDD52;
+  --berry:      #EE8BA0;
+  --mango:      #F2A93C;
+  --cocoa:      #3D2620;
+  --blueberry:  #7A5F8E;
+
+  --display: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", "Cascadia Mono", Menlo, Consolas, monospace;
+
+  --shell: 1260px;
+  --gut: clamp(20px, 5vw, 64px);
+  --rule: 1px solid var(--line);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--ink);
+  color: var(--cream);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+h1, h2, h3 { margin: 0; font-weight: 400; }
+p { margin: 0; }
+a { color: inherit; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+img { max-width: 100%; display: block; }
+
+:focus-visible { outline: 2px solid var(--matcha); outline-offset: 3px; }
+
+.shell { width: 100%; max-width: var(--shell); margin-inline: auto; padding-inline: var(--gut); }
+
+/* Type roles ---------------------------------------------- */
+.hd {
+  font-family: var(--display);
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.028em;
+  line-height: 0.92;
+  text-wrap: balance;
+}
+.label {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.label--go { color: var(--matcha); }
+.num { font-variant-numeric: tabular-nums; }
+
+/* ---------------------------------------------------------
+   SEAL
+   --------------------------------------------------------- */
+.seal { width: 42px; height: 42px; flex: none; }
+.seal svg { width: 100%; height: 100%; display: block; }
+.seal--big { width: 78px; height: 78px; }
+
+/* ---------------------------------------------------------
+   HEADER
+   --------------------------------------------------------- */
+.masthead {
+  position: sticky;
+  top: 0;
+  z-index: 60;
+  background: rgba(10, 12, 10, 0.84);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: var(--rule);
+}
+.masthead__in { display: flex; align-items: center; justify-content: space-between; gap: 22px; height: 72px; }
+.brand { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+.brand__name {
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 17px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+.brand__est {
+  display: block;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.24em;
+  color: var(--matcha);
+  margin-top: 4px;
+}
+@media (max-width: 520px) { .brand__est { display: none; } }
+
+.nav {
+  display: flex;
+  gap: 28px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.nav a { color: var(--cream-dim); text-decoration: none; padding-block: 6px; border-bottom: 1px solid transparent; transition: color .2s ease, border-color .2s ease; }
+.nav a:hover { color: var(--cream); border-bottom-color: var(--matcha); }
+@media (max-width: 900px) { .nav { display: none; } }
+
+.basket {
+  display: inline-flex; align-items: center; gap: 9px;
+  padding: 9px 15px;
+  border: var(--rule); border-radius: 999px;
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+  transition: border-color .2s ease, background .2s ease;
+}
+.basket:hover { border-color: var(--muted-deep); background: var(--ink-raised); }
+.basket__count {
+  min-width: 20px; height: 20px; padding-inline: 5px;
+  display: grid; place-items: center; border-radius: 999px;
+  background: var(--matcha); color: var(--ink-deep);
+  font-size: 11px; font-variant-numeric: tabular-nums;
+}
+.basket__count[data-empty="true"] { background: var(--line); color: var(--muted); }
+
+/* ---------------------------------------------------------
+   HERO
+   --------------------------------------------------------- */
+.hero { border-bottom: var(--rule); position: relative; overflow: hidden; }
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: -35% 30% 35% -25%;
+  background: radial-gradient(closest-side, rgba(168,201,59,.10), transparent 72%);
+  pointer-events: none;
+}
+.hero__in {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: clamp(30px, 5vw, 70px);
+  align-items: center;
+  padding-block: clamp(52px, 8vw, 104px);
+}
+@media (max-width: 940px) { .hero__in { grid-template-columns: 1fr; padding-block: 44px 52px; } }
+
+.hero__eyebrow { display: flex; align-items: center; gap: 11px; flex-wrap: wrap; margin-bottom: 24px; }
+.pip { width: 6px; height: 6px; border-radius: 999px; background: var(--matcha); box-shadow: 0 0 0 4px rgba(168,201,59,.16); }
+
+.hero h1 { font-size: clamp(40px, 6.6vw, 82px); margin-bottom: 24px; }
+.hero h1 span { color: var(--matcha); }
+
+.hero__lede { font-size: clamp(16px, 1.6vw, 18px); color: var(--cream-dim); max-width: 47ch; }
+.hero__acts { display: flex; flex-wrap: wrap; gap: 13px; margin-top: 32px; }
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  padding: 15px 27px; border-radius: 999px;
+  font-family: var(--mono); font-size: 11.5px; letter-spacing: .16em; text-transform: uppercase;
+  text-decoration: none; border: 1px solid transparent;
+  transition: transform .18s ease, background .2s ease, border-color .2s ease, color .2s ease;
+}
+.btn:active { transform: translateY(1px); }
+.btn--solid { background: var(--matcha); color: var(--ink-deep); }
+.btn--solid:hover { background: var(--matcha-lit); }
+.btn--ghost { border-color: var(--line); color: var(--cream); }
+.btn--ghost:hover { border-color: var(--cream-dim); background: var(--ink-raised); }
+.btn--wide { width: 100%; padding-block: 17px; }
+.btn[disabled] { opacity: .45; cursor: not-allowed; }
+
+.hero__spec { display: flex; flex-wrap: wrap; margin-top: 44px; border-top: var(--rule); }
+.hero__spec div { padding: 17px 24px 0 0; margin-right: 24px; border-right: var(--rule); }
+.hero__spec div:last-child { border-right: 0; margin-right: 0; padding-right: 0; }
+.hero__spec dt { font-family: var(--mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted-deep); }
+.hero__spec dd {
+  margin: 6px 0 0;
+  font-family: var(--display); font-weight: 800; text-transform: uppercase;
+  font-size: 23px; letter-spacing: -0.02em; font-variant-numeric: tabular-nums;
+}
+@media (max-width: 560px) {
+  .hero__spec { display: grid; grid-template-columns: repeat(3, 1fr); }
+  .hero__spec div { padding: 16px 12px 0 0; margin-right: 12px; }
+  .hero__spec dd { font-size: 18px; }
+}
+
+/* The pour — the moment the channel is built on ------------ */
+.stage { display: grid; justify-items: center; gap: 20px; }
+.pour {
+  position: relative;
+  width: min(400px, 84vw);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: end center;
+}
+.pour__glow {
+  position: absolute; inset: 8% 4% 4%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(168,201,59,.13), transparent 70%);
+}
+.pour__stream {
+  position: absolute;
+  top: 4%;
+  left: 50%;
+  width: 13px;
+  height: 44%;
+  transform: translateX(-50%);
+  border-radius: 0 0 40% 40%;
+  background: var(--matcha);
+  animation: hue 21s linear infinite, drop 3.4s ease-in-out infinite;
+  transform-origin: top center;
+  box-shadow: inset -3px 0 6px rgba(0,0,0,.25), inset 3px 0 5px rgba(255,255,255,.28);
+}
+.pour__cake {
+  position: relative;
+  width: 66%;
+  aspect-ratio: 1 / 0.72;
+  margin-bottom: 12%;
+  border-radius: 6px 6px 14px 14px;
+  background:
+    repeating-linear-gradient(90deg, rgba(255,255,255,.05) 0 1px, rgba(0,0,0,0) 1px 8px),
+    linear-gradient(90deg, rgba(0,0,0,.42) 0%, rgba(0,0,0,.05) 24%, rgba(255,255,255,.2) 46%, rgba(0,0,0,.03) 72%, rgba(0,0,0,.38) 100%),
+    #F3F0E4;
+  box-shadow: 0 34px 60px -26px rgba(0,0,0,.9), inset 0 -18px 26px rgba(61,38,32,.14);
+}
+.pour__board {
+  position: absolute;
+  left: -14%; right: -14%; bottom: -7%;
+  height: 13%;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #2E332B, #14170F);
+}
+.pour__top {
+  position: absolute;
+  left: -1.5%; right: -1.5%; top: -8%;
+  height: 17%;
+  border-radius: 50%;
+  background: radial-gradient(58% 130% at 36% 22%, rgba(255,255,255,.6), transparent 70%), #F8F5EA;
+  box-shadow: 0 3px 8px rgba(0,0,0,.4);
+}
+.pour__pool {
+  position: absolute;
+  left: 12%; right: 12%; top: -5.5%;
+  height: 12%;
+  border-radius: 50%;
+  background: var(--matcha);
+  animation: hue 21s linear infinite, pool 3.4s ease-in-out infinite;
+  box-shadow: inset 0 -3px 8px rgba(0,0,0,.28);
+}
+.ripple {
+  position: absolute;
+  left: 22%; right: 22%; top: -3.5%;
+  height: 8%;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,.5);
+  animation: ring 3.4s ease-out infinite;
+  opacity: 0;
+}
+@keyframes hue {
+  0%,   28%  { background-color: #A8C93B; }
+  33%,  61%  { background-color: #EE8BA0; }
+  66%,  94%  { background-color: #4A2E24; }
+  100%       { background-color: #A8C93B; }
+}
+@keyframes drop  { 0%, 100% { transform: translateX(-50%) scaleY(.94); } 50% { transform: translateX(-50%) scaleY(1.06); } }
+@keyframes pool  { 0%, 100% { transform: scale(.96); } 50% { transform: scale(1.05); } }
+@keyframes ring  { 0% { transform: scale(.5); opacity: .75; } 100% { transform: scale(2.1); opacity: 0; } }
+
+.meter { display: flex; align-items: flex-end; gap: 3px; height: 30px; width: min(400px, 84vw); justify-content: center; }
+.meter span { flex: 1; max-width: 4px; border-radius: 2px; background: var(--muted-deep); animation: bounce 1.9s ease-in-out infinite; }
+@keyframes bounce {
+  0%, 100% { height: 16%; background: var(--muted-deep); }
+  50%      { height: 100%; background: var(--matcha); }
+}
+.stage__cap { text-align: center; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .pour__stream, .pour__pool { animation: none; background: var(--matcha); }
+  .ripple { animation: none; opacity: .4; }
+  .meter span { animation: none; height: 40%; }
+  *, *::before, *::after { transition-duration: .01ms !important; }
+}
+
+/* ---------------------------------------------------------
+   TICKER
+   --------------------------------------------------------- */
+.ticker { border-bottom: var(--rule); background: var(--ink-deep); overflow: hidden; padding-block: 14px; }
+.ticker__track {
+  display: flex; gap: 40px; width: max-content;
+  animation: slide 46s linear infinite;
+  font-family: var(--mono); font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--muted-deep); white-space: nowrap;
+}
+.ticker__track b { color: var(--cream-dim); font-weight: 400; }
+@keyframes slide { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .ticker__track { animation: none; } }
+
+/* ---------------------------------------------------------
+   SECTIONS
+   --------------------------------------------------------- */
+.band { padding-block: clamp(60px, 8.5vw, 110px); border-bottom: var(--rule); }
+.band--deep { background: var(--ink-deep); }
+
+.head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 31ch);
+  gap: clamp(22px, 4vw, 58px);
+  align-items: end;
+  margin-bottom: clamp(34px, 5vw, 58px);
+}
+@media (max-width: 820px) { .head { grid-template-columns: 1fr; align-items: start; } }
+.head h2 { font-size: clamp(30px, 4.2vw, 50px); margin-top: 14px; }
+.head p { color: var(--muted); font-size: 15.5px; }
+
+/* ---------------------------------------------------------
+   CAKE DRAWINGS
+   --------------------------------------------------------- */
+.pic {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(115% 68% at 50% 14%, rgba(168,201,59,.11), transparent 66%),
+    linear-gradient(180deg, #171B14 0%, #080A08 100%);
+}
+.pic__set { position: absolute; left: 50%; bottom: 20%; width: 68%; transform: translateX(-50%); }
+.pic__shadow {
+  position: absolute; left: -18%; right: -18%; bottom: -13%; height: 26%;
+  border-radius: 50%;
+  background: radial-gradient(50% 50% at 50% 50%, rgba(0,0,0,.82), transparent 72%);
+}
+.pic__board {
+  position: absolute; left: -13%; right: -13%; bottom: -7%; height: 13%;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #333A2E, #171A14);
+}
+
+/* Whole round cake */
+.pic__body {
+  position: relative;
+  aspect-ratio: 1 / 0.84;
+  border-radius: 5px 5px 12px 12px;
+  background:
+    repeating-linear-gradient(90deg, rgba(255,255,255,.022) 0 1px, rgba(0,0,0,0) 1px 11px),
+    linear-gradient(90deg, rgba(0,0,0,.42) 0%, rgba(0,0,0,.05) 23%, rgba(255,255,255,.19) 45%, rgba(0,0,0,.03) 71%, rgba(0,0,0,.37) 100%),
+    var(--icing, #F3F0E4);
+  box-shadow: inset 0 -16px 26px rgba(61,38,32,.18);
+}
+.pic__body[data-gloss="true"] {
+  background:
+    linear-gradient(100deg, rgba(255,255,255,0) 34%, rgba(255,255,255,.42) 44%, rgba(255,255,255,0) 52%),
+    linear-gradient(90deg, rgba(0,0,0,.44) 0%, rgba(0,0,0,.04) 24%, rgba(255,255,255,.24) 46%, rgba(0,0,0,.02) 72%, rgba(0,0,0,.4) 100%),
+    var(--icing, #F3F0E4);
+}
+.pic__top {
+  position: absolute; left: -1.5%; right: -1.5%; top: -7.5%; height: 16%;
+  border-radius: 50%;
+  background: radial-gradient(58% 130% at 36% 22%, rgba(255,255,255,.5), transparent 72%), var(--top, #F8F5EA);
+  box-shadow: 0 -1px 0 rgba(255,255,255,.2), 0 3px 7px rgba(0,0,0,.36);
+}
+/* the lava sitting in the well */
+.pic__lava {
+  position: absolute; left: 16%; right: 16%; top: -4.5%; height: 11%;
+  border-radius: 50%;
+  background: var(--lava, #A8C93B);
+  box-shadow: inset 0 -3px 7px rgba(0,0,0,.3);
+}
+.pic__spill {
+  position: absolute; top: 3%;
+  background: var(--lava, #A8C93B);
+  border-radius: 0 0 999px 999px;
+}
+/* the exposed base of a shell-coated cake */
+.pic__hem {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 9%;
+  border-radius: 0 0 12px 12px;
+  background: var(--hem, #B5C46B);
+}
+.pic__cube {
+  position: absolute;
+  border-radius: 2px;
+  background: var(--fruit, #F2A93C);
+  box-shadow: 0 1px 3px rgba(0,0,0,.4), inset 0 2px 3px rgba(255,255,255,.3);
+}
+.pic__nut {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--accent, #EE8BA0);
+  box-shadow: 0 1px 3px rgba(0,0,0,.42), inset 0 -1px 2px rgba(0,0,0,.24);
+}
+
+/* Cross-section slab — the shot the channel is known for */
+.pic__slab {
+  position: relative;
+  aspect-ratio: 1 / 0.78;
+  display: flex;
+  flex-direction: column;
+  border-radius: 4px 4px 7px 7px;
+  overflow: hidden;
+  box-shadow: 0 26px 46px -22px rgba(0,0,0,.9);
+}
+.pic__slab::after {
+  content: "";
+  position: absolute; inset: 0;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.22) 0 2%, rgba(0,0,0,0) 7%),
+    linear-gradient(90deg, rgba(0,0,0,.34) 0%, rgba(0,0,0,0) 22%, rgba(255,255,255,.12) 46%, rgba(0,0,0,0) 74%, rgba(0,0,0,.3) 100%);
+  pointer-events: none;
+}
+.pic__layer {
+  width: 100%;
+  flex: none;
+  /* a hairline where each layer meets the next, so the
+     cross-section reads as built rather than printed */
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.14), inset 0 -1px 0 rgba(61,38,32,.22);
+}
+.pic__layer[data-crumb="true"] {
+  background-image:
+    radial-gradient(circle at 18% 40%, rgba(255,255,255,.30) 0 1.6px, transparent 2px),
+    radial-gradient(circle at 52% 66%, rgba(255,255,255,.24) 0 2.2px, transparent 2.6px),
+    radial-gradient(circle at 78% 34%, rgba(255,255,255,.28) 0 1.8px, transparent 2.2px),
+    radial-gradient(circle at 34% 20%, rgba(0,0,0,.16) 0 2px, transparent 2.4px);
+}
+
+/* ---------------------------------------------------------
+   FEATURED FILM
+   --------------------------------------------------------- */
+.feature {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: clamp(26px, 4vw, 58px);
+  align-items: center;
+}
+@media (max-width: 900px) { .feature { grid-template-columns: 1fr; } }
+
+.feature__frame {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  background: var(--shot, var(--ink-raised));
+  background-size: cover;
+  background-position: center;
+  border: var(--rule);
+  overflow: hidden;
+}
+.feature__frame:hover .feature__play { transform: translate(-50%, -50%) scale(1.07); }
+.feature__scrim { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(6,7,6,0) 0 58%, rgba(6,7,6,.74)); }
+.feature__play {
+  position: absolute;
+  left: 50%; top: 50%;
+  width: 72px; height: 72px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: var(--matcha);
+  display: grid; place-items: center;
+  box-shadow: 0 12px 34px rgba(0,0,0,.6);
+  transition: transform .22s ease;
+}
+.feature__play::after {
+  content: "";
+  border-left: 20px solid var(--ink-deep);
+  border-block: 12px solid transparent;
+  margin-left: 5px;
+}
+.feature__views {
+  position: absolute; top: 14px; left: 14px;
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(6,7,6,.76);
+  border: 1px solid rgba(168,201,59,.32);
+  font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--matcha);
+}
+.feature__strap {
+  position: absolute; left: 16px; right: 16px; bottom: 14px;
+  font-family: var(--mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--cream-dim);
+  text-shadow: 0 1px 10px rgba(6,7,6,.95);
+}
+.feature__meta { display: grid; gap: 18px; justify-items: start; }
+.feature__meta h2 { font-size: clamp(28px, 3.6vw, 44px); }
+.feature__meta p { color: var(--muted); font-size: 15.5px; max-width: 40ch; }
+.feature__price {
+  display: flex; align-items: baseline; gap: 12px;
+  font-family: var(--display); font-weight: 800; letter-spacing: -0.02em;
+  font-size: 30px; color: var(--matcha); font-variant-numeric: tabular-nums;
+}
+.feature__price small {
+  font-family: var(--mono); font-weight: 400; font-size: 10px;
+  letter-spacing: .14em; text-transform: uppercase; color: var(--muted-deep);
+}
+.feature__acts { display: flex; flex-wrap: wrap; gap: 12px; }
+
+/* ---------------------------------------------------------
+   COLLECTION
+   --------------------------------------------------------- */
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(20px, 2.6vw, 34px) clamp(18px, 2.2vw, 30px); }
+@media (max-width: 940px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 580px) { .grid { grid-template-columns: 1fr; } }
+
+.tile { display: flex; flex-direction: column; }
+.tile__shot {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  background: var(--shot, var(--ink-raised));
+  background-size: cover;
+  background-position: center;
+  border: var(--rule);
+  overflow: hidden;
+}
+.tile__views {
+  position: absolute; z-index: 2; top: 12px; left: 12px;
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 5px 11px 5px 9px;
+  border-radius: 999px;
+  background: rgba(6,7,6,.74);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(168,201,59,.3);
+  font-family: var(--mono); font-size: 9.5px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--matcha);
+}
+.tile__views::before {
+  content: "";
+  border-left: 6px solid var(--matcha);
+  border-block: 4px solid transparent;
+}
+.tile__body { display: flex; flex-direction: column; gap: 7px; padding-top: 16px; flex: 1; }
+.tile__top { display: flex; justify-content: space-between; align-items: baseline; gap: 14px; }
+.tile__name { font-family: var(--display); font-weight: 800; text-transform: uppercase; letter-spacing: -0.015em; font-size: 17px; line-height: 1.12; }
+.tile__price { font-family: var(--display); font-weight: 800; font-size: 17px; font-variant-numeric: tabular-nums; color: var(--matcha); white-space: nowrap; }
+.tile__note { color: var(--muted); font-size: 14px; line-height: 1.5; }
+.tile__spec { margin-top: 4px; font-family: var(--mono); font-size: 10px; letter-spacing: .13em; text-transform: uppercase; color: var(--muted-deep); }
+.tile__add {
+  margin-top: 14px; align-self: flex-start;
+  padding: 11px 20px; border: var(--rule); border-radius: 999px;
+  font-family: var(--mono); font-size: 10.5px; letter-spacing: .15em; text-transform: uppercase;
+  transition: background .2s ease, border-color .2s ease, color .2s ease;
+}
+.tile__add:hover { background: var(--cream); color: var(--ink); border-color: var(--cream); }
+.tile__add[data-state="added"] { background: var(--matcha); border-color: var(--matcha); color: var(--ink-deep); }
+
+/* ---------------------------------------------------------
+   CONFIGURATOR
+   --------------------------------------------------------- */
+.maker { display: grid; grid-template-columns: 1fr minmax(0, 400px); gap: clamp(28px, 5vw, 70px); align-items: start; }
+@media (max-width: 940px) { .maker { grid-template-columns: 1fr; } }
+
+.opt { padding-block: 22px; border-bottom: var(--rule); }
+.opt:first-of-type { border-top: var(--rule); }
+.opt__q { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; margin-bottom: 14px; }
+.opt__q h3 { font-family: var(--display); font-weight: 800; text-transform: uppercase; letter-spacing: -0.02em; font-size: 17px; }
+.chips { display: flex; flex-wrap: wrap; gap: 9px; }
+.chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 10px 16px; border: var(--rule); border-radius: 999px;
+  font-size: 13.5px; color: var(--cream-dim);
+  transition: border-color .18s ease, color .18s ease, background .18s ease;
+}
+.chip:hover { border-color: var(--muted-deep); color: var(--cream); }
+.chip[aria-pressed="true"] { border-color: var(--matcha); background: var(--matcha); color: var(--ink-deep); }
+.chip__dot { width: 11px; height: 11px; border-radius: 50%; border: 1px solid rgba(6,7,6,.25); }
+.chip__plus { font-family: var(--mono); font-size: 10.5px; letter-spacing: .1em; opacity: .72; font-variant-numeric: tabular-nums; }
+
+.ticketwrap { position: sticky; top: 96px; }
+.ticket { border: var(--rule); background: var(--ink-raised); padding: 26px; }
+.ticket__pic { position: relative; aspect-ratio: 4 / 3; margin: -26px -26px 20px; border-bottom: var(--rule); overflow: hidden; }
+.ticket__head { display: flex; justify-content: space-between; align-items: center; padding-bottom: 16px; border-bottom: var(--rule); }
+.ticket__list { list-style: none; margin: 0; padding: 18px 0; display: grid; gap: 12px; }
+.ticket__list li { display: flex; justify-content: space-between; gap: 16px; font-size: 14px; }
+.ticket__list span:first-child { color: var(--muted); font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; padding-top: 3px; }
+.ticket__list span:last-child { text-align: right; }
+.ticket__total { display: flex; justify-content: space-between; align-items: baseline; padding-top: 18px; border-top: var(--rule); margin-bottom: 18px; }
+.ticket__total strong {
+  font-family: var(--display); font-weight: 800; font-size: 32px;
+  color: var(--matcha); font-variant-numeric: tabular-nums; letter-spacing: -0.02em;
+}
+.ticket__fine { margin-top: 14px; text-align: center; font-family: var(--mono); font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted-deep); }
+
+/* ---------------------------------------------------------
+   PROCESS
+   --------------------------------------------------------- */
+.steps { display: grid; grid-template-columns: repeat(3, 1fr); border-top: var(--rule); }
+@media (max-width: 820px) { .steps { grid-template-columns: 1fr; } }
+.step { padding: 30px clamp(20px, 3vw, 40px) 34px; border-right: var(--rule); border-bottom: var(--rule); }
+.step:last-child { border-right: 0; }
+@media (max-width: 820px) { .step { border-right: 0; } }
+.step__n { font-family: var(--mono); font-size: 11px; letter-spacing: .18em; color: var(--matcha); font-variant-numeric: tabular-nums; }
+.step h3 { font-family: var(--display); font-weight: 800; text-transform: uppercase; letter-spacing: -0.02em; font-size: 21px; margin: 14px 0 10px; }
+.step p { color: var(--muted); font-size: 14.5px; }
+
+/* ---------------------------------------------------------
+   STUDIO STRIP
+   --------------------------------------------------------- */
+.films { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+@media (max-width: 800px) { .films { grid-template-columns: repeat(2, 1fr); } }
+.film {
+  position: relative; margin: 0;
+  aspect-ratio: 9 / 13;
+  background: var(--shot, var(--ink-raised));
+  background-size: cover; background-position: center;
+  border: var(--rule); overflow: hidden;
+}
+.film figcaption { position: absolute; left: 12px; right: 12px; bottom: 30px; font-size: 13px; line-height: 1.35; text-shadow: 0 1px 10px rgba(6,7,6,.95); }
+.film__views {
+  position: absolute; left: 12px; bottom: 11px;
+  font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--matcha);
+  text-shadow: 0 1px 10px rgba(6,7,6,.95);
+}
+.film__scrim { position: absolute; inset: 0; background: linear-gradient(180deg, transparent 42%, rgba(6,7,6,.88)); }
+.film__play {
+  position: absolute; top: 12px; right: 12px;
+  width: 26px; height: 26px; border-radius: 50%;
+  background: rgba(6,7,6,.62); border: 1px solid rgba(241,241,231,.3);
+  display: grid; place-items: center;
+}
+.film__play::after { content: ""; border-left: 7px solid var(--cream); border-block: 4.5px solid transparent; margin-left: 2px; }
+
+/* ---------------------------------------------------------
+   VOICES
+   --------------------------------------------------------- */
+.voices { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(20px, 3vw, 40px); }
+@media (max-width: 880px) { .voices { grid-template-columns: 1fr; } }
+.voice { border-top: 2px solid var(--line); padding-top: 22px; display: grid; gap: 14px; }
+.voice blockquote { margin: 0; font-size: 17px; line-height: 1.5; }
+.voice cite { font-style: normal; font-family: var(--mono); font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted-deep); }
+
+/* ---------------------------------------------------------
+   CLOSE + FOOTER
+   --------------------------------------------------------- */
+.close { text-align: center; display: grid; justify-items: center; gap: 24px; }
+.close h2 { font-size: clamp(34px, 5.6vw, 70px); max-width: 16ch; }
+.close p { color: var(--muted); max-width: 48ch; }
+
+.foot { padding-block: 54px 30px; background: var(--ink-deep); }
+.foot__cols { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: clamp(28px, 4vw, 60px); padding-bottom: 38px; border-bottom: var(--rule); }
+@media (max-width: 780px) { .foot__cols { grid-template-columns: 1fr; } }
+.foot h4 { margin: 0 0 14px; font-family: var(--mono); font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted-deep); font-weight: 400; }
+.foot ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 9px; font-size: 14px; color: var(--cream-dim); }
+.foot a { text-decoration: none; }
+.foot a:hover { color: var(--matcha); }
+.foot__note { color: var(--muted); font-size: 14px; max-width: 36ch; margin-top: 14px; }
+.foot__base { display: flex; justify-content: space-between; gap: 18px; flex-wrap: wrap; padding-top: 22px; font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted-deep); }
+
+/* ---------------------------------------------------------
+   BOX DRAWER
+   --------------------------------------------------------- */
+.scrim {
+  position: fixed; inset: 0; z-index: 90;
+  background: rgba(6,7,6,.68);
+  backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px);
+  opacity: 0; visibility: hidden;
+  transition: opacity .28s ease, visibility .28s ease;
+}
+.scrim[data-open="true"] { opacity: 1; visibility: visible; }
+
+.drawer {
+  position: fixed; z-index: 100; top: 0; right: 0;
+  height: 100%; width: min(420px, 100%);
+  background: var(--ink-raised); border-left: var(--rule);
+  display: flex; flex-direction: column;
+  transform: translateX(101%);
+  transition: transform .34s cubic-bezier(.4,0,.2,1);
+}
+.drawer[data-open="true"] { transform: none; }
+.drawer__head { display: flex; align-items: center; justify-content: space-between; padding: 22px 26px; border-bottom: var(--rule); }
+.drawer__x { font-size: 22px; line-height: 1; color: var(--muted); padding: 4px 8px; }
+.drawer__x:hover { color: var(--cream); }
+.drawer__body { flex: 1; overflow-y: auto; padding: 8px 26px; }
+.drawer__foot { padding: 22px 26px; border-top: var(--rule); background: var(--ink-lift); }
+
+.row { display: grid; grid-template-columns: 54px 1fr auto; gap: 14px; align-items: center; padding-block: 18px; border-bottom: var(--rule); }
+.row:last-child { border-bottom: 0; }
+.row__chip { width: 54px; aspect-ratio: 4/5; background: var(--shot, var(--ink-lift)); background-size: cover; border: var(--rule); }
+.row__name { font-family: var(--display); font-weight: 800; text-transform: uppercase; font-size: 13px; letter-spacing: -0.01em; line-height: 1.25; }
+.row__meta { font-family: var(--mono); font-size: 9.5px; letter-spacing: .13em; text-transform: uppercase; color: var(--muted-deep); margin-top: 6px; }
+.row__right { display: grid; justify-items: end; gap: 9px; }
+.row__price { font-family: var(--display); font-weight: 800; font-size: 15px; font-variant-numeric: tabular-nums; color: var(--matcha); }
+.qty { display: inline-flex; align-items: center; border: var(--rule); border-radius: 999px; }
+.qty button { width: 26px; height: 26px; color: var(--muted); font-size: 14px; line-height: 1; }
+.qty button:hover { color: var(--cream); }
+.qty span { min-width: 22px; text-align: center; font-family: var(--mono); font-size: 12px; font-variant-numeric: tabular-nums; }
+
+.empty { display: grid; gap: 10px; place-items: center; text-align: center; padding: 70px 10px; }
+.empty p { color: var(--muted); font-size: 14px; max-width: 26ch; }
+
+.tally { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 16px; }
+.tally strong { font-family: var(--display); font-weight: 800; font-size: 26px; font-variant-numeric: tabular-nums; }
+
+/* Reveal --------------------------------------------------- */
+.rise { opacity: 0; transform: translateY(18px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.3,1); }
+.rise[data-seen="true"] { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .rise { opacity: 1; transform: none; } }
+
+/* ---------------------------------------------------------
+   CONCEPT STRIP — delete this block and the matching
+   <aside class="pitch"> in the markup to ship the page live.
+   --------------------------------------------------------- */
+.pitch { background: var(--matcha); color: var(--ink-deep); padding-block: 20px; }
+.pitch__in { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+.pitch p, .pitch a { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; line-height: 1.6; }
+</style>
+</head>
+
+<body>
+
+<header class="masthead">
+  <div class="shell masthead__in">
+    <a class="brand" href="#top">
+      <span class="seal" id="sealTop" aria-hidden="true"></span>
+      <span>
+        <span class="brand__name">Noble Cake</span>
+        <span class="brand__est">Est. 2017</span>
+      </span>
+    </a>
+    <nav class="nav" aria-label="Primary">
+      <a href="#collection">The Cakes</a>
+      <a href="#maker">Build One</a>
+      <a href="#process">How It Works</a>
+      <a href="#studio">The Channel</a>
+    </nav>
+    <button class="basket" id="basketBtn" aria-haspopup="dialog">
+      Box
+      <span class="basket__count" id="basketCount" data-empty="true">0</span>
+    </button>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO ------------------------------------------------ -->
+  <section class="hero">
+    <div class="shell hero__in">
+      <div>
+        <div class="hero__eyebrow">
+          <span class="pip" aria-hidden="true"></span>
+          <span class="label">ASMR baking &amp; cake decorating</span>
+          <span class="label" style="color:var(--muted-deep)">·</span>
+          <span class="label">112 films</span>
+        </div>
+
+        <h1 class="hd">Every cake you've<br />watched us <span>cut open.</span></h1>
+
+        <p class="hero__lede">
+          Matcha lava, choc-shell, chiffon sponge in four layers — the cakes
+          from the channel, now made to order in the same kitchen, in the same
+          gloves, and shipped to you cold.
+        </p>
+
+        <div class="hero__acts">
+          <a class="btn btn--solid" href="#collection">Order a cake</a>
+          <a class="btn btn--ghost" href="#maker">Build your own</a>
+        </div>
+
+        <dl class="hero__spec">
+          <div><dt>Baked</dt><dd>Tue–Sat</dd></div>
+          <div><dt>Lead time</dt><dd class="num">72 hrs</dd></div>
+          <div><dt>Shipped</dt><dd>Chilled</dd></div>
+        </dl>
+      </div>
+
+      <div class="stage">
+        <div class="pour" role="img" aria-label="Matcha glaze pouring into the well of a chiffon cake, rippling as it settles.">
+          <div class="pour__glow"></div>
+          <div class="pour__stream"></div>
+          <div class="pour__cake">
+            <div class="pour__board"></div>
+            <div class="pour__top"></div>
+            <div class="pour__pool"></div>
+            <span class="ripple"></span>
+            <span class="ripple" style="animation-delay:1.1s"></span>
+            <span class="ripple" style="animation-delay:2.2s"></span>
+          </div>
+        </div>
+        <div class="meter" id="meter" aria-hidden="true"></div>
+        <p class="stage__cap label">The pour · the shell · the first cut</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TICKER ---------------------------------------------- -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker__track" id="ticker"></div>
+  </div>
+
+  <!-- FEATURED FILM --------------------------------------- -->
+  <section class="band" id="featured">
+    <div class="shell">
+      <div class="feature rise">
+        <a class="feature__frame" id="featureFrame" href="#" target="_blank" rel="noopener" aria-label="Watch this film on YouTube">
+          <span class="feature__scrim"></span>
+          <span class="feature__views" id="featureViews"></span>
+          <span class="feature__play" aria-hidden="true"></span>
+          <span class="feature__strap" id="featureStrap"></span>
+        </a>
+        <div class="feature__meta">
+          <span class="label label--go">This week's film</span>
+          <h2 class="hd" id="featureTitle"></h2>
+          <p id="featureBlurb"></p>
+          <div class="feature__price">
+            <span id="featurePrice"></span>
+            <small id="featureSpec"></small>
+          </div>
+          <div class="feature__acts">
+            <button class="btn btn--solid" id="featureAdd">Order this one</button>
+            <a class="btn btn--ghost" id="featureWatch" href="#" target="_blank" rel="noopener">Watch the film</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COLLECTION ------------------------------------------ -->
+  <section class="band" id="collection">
+    <div class="shell">
+      <div class="head rise">
+        <div>
+          <span class="label label--go">The Cakes</span>
+          <h2 class="hd">Six from the channel, made for your table.</h2>
+        </div>
+        <p>
+          Every one of these has been filmed start to finish. The view count is
+          on each — you already know what the inside looks like.
+        </p>
+      </div>
+      <div class="grid" id="grid"></div>
+    </div>
+  </section>
+
+  <!-- CONFIGURATOR ---------------------------------------- -->
+  <section class="band band--deep" id="maker">
+    <div class="shell">
+      <div class="head rise">
+        <div>
+          <span class="label label--go">Build One</span>
+          <h2 class="hd">Or put one together yourself.</h2>
+        </div>
+        <p>
+          Four choices, one price, no consultation call. Tiered and event cakes
+          start with a message instead.
+        </p>
+      </div>
+
+      <div class="maker">
+        <div>
+          <div class="opt">
+            <div class="opt__q"><h3>How big?</h3><span class="label">Step 01</span></div>
+            <div class="chips" id="optSize" role="group" aria-label="Size"></div>
+          </div>
+          <div class="opt">
+            <div class="opt__q"><h3>Which sponge?</h3><span class="label">Step 02</span></div>
+            <div class="chips" id="optSponge" role="group" aria-label="Sponge"></div>
+          </div>
+          <div class="opt">
+            <div class="opt__q"><h3>What's in the middle?</h3><span class="label">Step 03</span></div>
+            <div class="chips" id="optCentre" role="group" aria-label="Centre"></div>
+          </div>
+          <div class="opt">
+            <div class="opt__q"><h3>How is it coated?</h3><span class="label">Step 04</span></div>
+            <div class="chips" id="optCoat" role="group" aria-label="Coating"></div>
+          </div>
+        </div>
+
+        <div class="ticketwrap">
+          <div class="ticket">
+            <div class="ticket__pic" id="ticketPic" role="img" aria-label="A preview of the cake you are building."></div>
+            <div class="ticket__head">
+              <span class="label label--go">Your cake</span>
+              <span class="label" id="ticketServes">Serves 10</span>
+            </div>
+            <ul class="ticket__list" id="ticketList"></ul>
+            <div class="ticket__total">
+              <span class="label">Total</span>
+              <strong id="ticketTotal">$0</strong>
+            </div>
+            <button class="btn btn--solid btn--wide" id="ticketAdd">Add to box</button>
+            <p class="ticket__fine">Baked Tue–Sat · 72-hour lead time</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS --------------------------------------------- -->
+  <section class="band" id="process">
+    <div class="shell">
+      <div class="head rise">
+        <div>
+          <span class="label label--go">How It Works</span>
+          <h2 class="hd">Three days from your order to your table.</h2>
+        </div>
+        <p>
+          Mousse and jelly cakes have to be built in stages and set overnight.
+          Nothing here is made ahead or frozen.
+        </p>
+      </div>
+
+      <div class="steps rise">
+        <div class="step">
+          <span class="step__n">01</span>
+          <h3>You choose</h3>
+          <p>
+            Order from the six, or build your own. Pick a delivery date at
+            checkout and we hold the slot straight away.
+          </p>
+        </div>
+        <div class="step">
+          <span class="step__n">02</span>
+          <h3>We build it</h3>
+          <p>
+            Chiffon sponge on day one. Mousse and jelly set overnight. Shell
+            or mirror goes on the morning it ships — usually on camera.
+          </p>
+        </div>
+        <div class="step">
+          <span class="step__n">03</span>
+          <h3>It travels cold</h3>
+          <p>
+            Packed in a rigid chilled mailer on a support base and couriered
+            overnight. Straight into the fridge, out twenty minutes before.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STUDIO ---------------------------------------------- -->
+  <section class="band band--deep" id="studio">
+    <div class="shell">
+      <div class="head rise">
+        <div>
+          <span class="label label--go">The Channel</span>
+          <h2 class="hd">The part everyone stays for.</h2>
+        </div>
+        <p>
+          No music, no talking. Black gloves, a clean bench, and whatever is
+          being poured that week.
+        </p>
+      </div>
+
+      <div class="films rise" id="films"></div>
+
+      <div style="display:flex; gap:13px; flex-wrap:wrap; margin-top:32px;">
+        <a class="btn btn--ghost" href="https://www.youtube.com/@NOBLE-CAKE" target="_blank" rel="noopener">Watch on YouTube</a>
+        <a class="btn btn--ghost" href="#collection">Order what you just watched</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- VOICES ---------------------------------------------- -->
+  <section class="band">
+    <div class="shell">
+      <div class="head rise">
+        <div>
+          <span class="label label--go">After the Box Is Open</span>
+          <h2 class="hd">What people say once they cut it.</h2>
+        </div>
+      </div>
+      <div class="voices rise">
+        <div class="voice">
+          <blockquote>
+            "I have watched the matcha lava video probably forty times. Cutting
+            into it myself and getting that exact pour was worth every penny."
+          </blockquote>
+          <cite>Priya M. — Matcha Lava</cite>
+        </div>
+        <div class="voice">
+          <blockquote>
+            "The layers were dead straight, like the cross-section shots. My
+            sister thought I'd bought it from a hotel."
+          </blockquote>
+          <cite>Daniel O. — Hazelnut Dark Chocolate Brick</cite>
+        </div>
+        <div class="voice">
+          <blockquote>
+            "Arrived colder than my fridge and the shell hadn't cracked once.
+            I lifted it off at the table and everyone went quiet."
+          </blockquote>
+          <cite>Alina K. — Matcha &amp; Pistachio Choc-Shell</cite>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLOSE ----------------------------------------------- -->
+  <section class="band band--deep">
+    <div class="shell close rise">
+      <span class="label label--go">No occasion required</span>
+      <h2 class="hd">Somebody you know deserves the good one.</h2>
+      <p>
+        Order by Sunday night for a Wednesday delivery. Add a handwritten note
+        at checkout — we write it at the bench.
+      </p>
+      <a class="btn btn--solid" href="#collection">Start an order</a>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="shell">
+    <div class="foot__cols">
+      <div>
+        <span class="seal seal--big" id="sealFoot" aria-hidden="true"></span>
+        <p class="foot__note">
+          ASMR baking and cake decorating since 2017. Chiffon, mousse, shell
+          and mirror — baked to order and shipped cold.
+        </p>
+      </div>
+      <div>
+        <h4>Shop</h4>
+        <ul>
+          <li><a href="#collection">The Cakes</a></li>
+          <li><a href="#maker">Build One</a></li>
+          <li><a href="#collection">Gift Cards</a></li>
+          <li><a href="#maker">Events</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Details</h4>
+        <ul>
+          <li><a href="#process">Delivery &amp; Storage</a></li>
+          <li><a href="#process">Allergens</a></li>
+          <li><a href="https://www.youtube.com/@NOBLE-CAKE" target="_blank" rel="noopener">YouTube</a></li>
+          <li><a href="#top">hello@noblecake.com</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot__base">
+      <span>© <span class="num">2026</span> Noble Cake</span>
+      <span>Baked Tue–Sat · Shipped chilled</span>
+    </div>
+  </div>
+</footer>
+
+<!-- CONCEPT STRIP — delete this <aside> (and the .pitch CSS block) to ship live -->
+<aside class="pitch">
+  <div class="shell pitch__in">
+    <p>Storefront concept for Noble Cake — not a live shop yet.</p>
+    <a href="https://www.youtube.com/@NOBLE-CAKE">Let's build the real one →</a>
+  </div>
+</aside>
+
+<!-- BOX --------------------------------------------------- -->
+<div class="scrim" id="scrim" data-open="false"></div>
+<aside class="drawer" id="drawer" data-open="false" role="dialog" aria-modal="true" aria-label="Your box" aria-hidden="true">
+  <div class="drawer__head">
+    <span class="label label--go">Your box</span>
+    <button class="drawer__x" id="drawerX" aria-label="Close box">×</button>
+  </div>
+  <div class="drawer__body" id="drawerBody"></div>
+  <div class="drawer__foot">
+    <div class="tally">
+      <span class="label">Subtotal</span>
+      <strong id="tallyTotal">$0</strong>
+    </div>
+    <button class="btn btn--solid btn--wide" id="checkout" disabled>Checkout</button>
+    <p class="ticket__fine">Delivery date chosen at checkout</p>
+  </div>
+</aside>
+
+<script>
+(function () {
+  "use strict";
+
+  var el = function (id) { return document.getElementById(id); };
+  var money = function (n) { return "$" + n.toLocaleString("en-US"); };
+
+  /* ------------------------------------------------------
+     THE SEAL
+     Redrawn from the channel avatar. Swap the whole thing
+     for the real logo file when you have it.
+     ------------------------------------------------------ */
+  function seal(key) {
+    var top = "topArc-" + key;
+    var base = "baseArc-" + key;
+    return (
+      '<svg viewBox="0 0 100 100" role="presentation">' +
+        "<defs>" +
+          '<path id="' + top + '" d="M 12,50 A 38,38 0 0 1 88,50" fill="none" />' +
+          '<path id="' + base + '" d="M 17,50 A 33,33 0 0 0 83,50" fill="none" />' +
+        "</defs>" +
+        '<circle cx="50" cy="50" r="49" fill="#0A0C0A" />' +
+        '<circle cx="50" cy="50" r="46.5" fill="none" stroke="#F1F1E7" stroke-width="1.2" />' +
+        '<circle cx="50" cy="50" r="42" fill="none" stroke="#F1F1E7" stroke-width="0.5" opacity=".65" />' +
+        '<text fill="#F1F1E7" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" ' +
+          'font-size="10.5" font-weight="600" letter-spacing="2.6" text-anchor="middle">' +
+          '<textPath href="#' + top + '" startOffset="50%">NOBLE CAKE</textPath>' +
+        "</text>" +
+        '<text fill="#F1F1E7" font-family="Helvetica Neue, Helvetica, Arial, sans-serif" ' +
+          'font-size="6" letter-spacing="2.2" text-anchor="middle" opacity=".85">' +
+          '<textPath href="#' + base + '" startOffset="50%">EST. 2017</textPath>' +
+        "</text>" +
+        /* monogram */
+        '<g fill="#F1F1E7">' +
+          '<rect x="38" y="38" width="3.2" height="25" />' +
+          '<rect x="58.8" y="38" width="3.2" height="25" />' +
+          '<polygon points="41.2,38 45,38 62,58 62,63.5 58.2,63.5 41.2,43.5" />' +
+        "</g>" +
+        '<circle cx="50" cy="70.5" r="1.6" fill="#F1F1E7" opacity=".9" />' +
+      "</svg>"
+    );
+  }
+
+  el("sealTop").innerHTML = seal("a");
+  el("sealFoot").innerHTML = seal("b");
+
+  /* ------------------------------------------------------
+     CAKE DRAWINGS
+     Two silhouettes: a whole round cake, and the
+     cross-section slab the channel is known for.
+     ------------------------------------------------------ */
+  function scatter(seed) {
+    var s = seed * 7919;
+    return function () { s = (s * 1664525 + 1013904223) % 4294967296; return s / 4294967296; };
+  }
+
+  function frame(inner, grow, round) {
+    return (
+      '<div class="pic">' +
+        '<div class="pic__set"' + (grow ? ' style="width:' + grow + '%"' : "") + ">" +
+          '<div class="pic__shadow"></div>' +
+          (round ? '<div class="pic__board"></div>' : "") +
+          inner +
+        "</div>" +
+      "</div>"
+    );
+  }
+
+  function roundCake(t, seed) {
+    var r = scatter(seed);
+    var vars =
+      "--icing:" + t.icing + ";--top:" + (t.top || t.icing) +
+      ";--lava:" + (t.lava || "#A8C93B") + ";--hem:" + (t.hem || t.icing) +
+      ";--fruit:" + (t.fruit || "#F2A93C") + ";--accent:" + (t.accent || "#EE8BA0");
+    var body = "", crown = "", i;
+
+    if (t.style === "shell") { body += '<div class="pic__hem"></div>'; }
+
+    if (t.style === "lava") {
+      for (i = 0; i < 6; i++) {
+        body +=
+          '<span class="pic__spill" style="left:' + (7 + i * 15.5 + r() * 3).toFixed(1) +
+          "%;width:" + (7 + r() * 5).toFixed(1) +
+          "%;height:" + (9 + r() * 22).toFixed(1) + '%"></span>';
+      }
+    }
+
+    if (t.style === "fruit") {
+      for (i = 0; i < 11; i++) {
+        var c = 6 + r() * 4;
+        crown +=
+          '<span class="pic__cube" style="left:' + (13 + r() * 68).toFixed(1) +
+          "%;top:" + (12 + r() * 36).toFixed(1) +
+          "%;width:" + c.toFixed(1) + "%;aspect-ratio:1;transform:rotate(" + Math.round(r() * 90) +
+          "deg);background:" + (i % 3 === 0 ? "var(--accent)" : "var(--fruit)") + '"></span>';
+      }
+    } else {
+      for (i = 0; i < 3; i++) {
+        crown +=
+          '<span class="pic__nut" style="left:' + (22 + r() * 52).toFixed(1) +
+          "%;top:" + (16 + r() * 28).toFixed(1) +
+          "%;width:" + (5.5 + r() * 4).toFixed(1) + '%;aspect-ratio:1"></span>';
+      }
+    }
+
+    return frame(
+      '<div class="pic__body" style="' + vars + '"' + (t.style === "mirror" ? ' data-gloss="true"' : "") + ">" +
+        body +
+        '<div class="pic__top">' + crown + "</div>" +
+        (t.style === "lava" ? '<div class="pic__lava"></div>' : "") +
+      "</div>",
+      t.grow,
+      true
+    );
+  }
+
+  function slabCake(t) {
+    var bands = "";
+    t.layers.forEach(function (layer) {
+      bands +=
+        '<div class="pic__layer" style="height:' + layer[1] + "%;background:" + layer[0] + '"' +
+        (layer[2] ? ' data-crumb="true"' : "") + "></div>";
+    });
+    return frame('<div class="pic__slab">' + bands + "</div>", t.grow);
+  }
+
+  function draw(t, seed) { return t.layers ? slabCake(t) : roundCake(t, seed); }
+
+  /* Tiny stand-in for the box drawer, where a full drawing
+     would be smaller than a postage stamp. */
+  function chip(t) {
+    if (t.layers) {
+      var stops = "", at = 0;
+      t.layers.forEach(function (layer) {
+        stops += (stops ? ", " : "") + layer[0] + " " + at + "% " + (at + layer[1]) + "%";
+        at += layer[1];
+      });
+      return "linear-gradient(180deg, " + stops + ")";
+    }
+    return "linear-gradient(180deg, " + (t.top || t.icing) + " 0 32%, " + t.icing + " 32%)";
+  }
+
+  /* ------------------------------------------------------
+     THE CAKES
+     Names and view counts are real, from the channel.
+     Prices are placeholders.
+     ------------------------------------------------------ */
+  var CAKES = [
+    {
+      id: "strawberry-matcha",
+      name: "Strawberry Matcha Mirror",
+      note: "Strawberry mousse poured into a matcha chiffon shell, finished with a mirror glaze.",
+      spec: '6" round · serves 10 · strawberry + matcha',
+      price: 96,
+      views: "1.8M views",
+      photo: "",
+      tone: { style: "mirror", icing: "#EFA7B8", top: "#F5C2CE", accent: "#A8C93B" }
+    },
+    {
+      id: "choc-shell",
+      name: "Matcha &amp; Pistachio Choc-Shell",
+      note: "Pistachio mousse under a dark chocolate shell you crack at the table.",
+      spec: '6" round · serves 10 · pistachio',
+      price: 94,
+      views: "580K views",
+      photo: "",
+      tone: { style: "shell", icing: "#3A2822", top: "#48332B", hem: "#B5C46B", accent: "#A8C93B" }
+    },
+    {
+      id: "chiffon",
+      name: "Four-Layer Chiffon",
+      note: "The plain one done properly. Four layers of chiffon sponge, cream between each.",
+      spec: '7" round · serves 12 · vanilla chiffon',
+      price: 72,
+      views: "577K views",
+      photo: "",
+      grow: 66,
+      layers: [
+        ["#F2E7C8", 9],
+        ["#F7F3E6", 12],
+        ["#EFDCA4", 17, true],
+        ["#F7F3E6", 12],
+        ["#EFDCA4", 17, true],
+        ["#F7F3E6", 12],
+        ["#EFDCA4", 21, true]
+      ]
+    },
+    {
+      id: "hazelnut-brick",
+      name: "Hazelnut Dark Chocolate Brick",
+      note: "Dark chocolate sponge, hazelnut praline cream, a crunch layer through the middle.",
+      spec: "slab · serves 8 · dark chocolate",
+      price: 88,
+      views: "297K views",
+      photo: "",
+      grow: 66,
+      layers: [
+        ["#2A1A15", 12],
+        ["#4A3128", 18, true],
+        ["#C99356", 9],
+        ["#3A2620", 16, true],
+        ["#E4C79A", 11],
+        ["#3A2620", 20, true],
+        ["#241511", 14]
+      ]
+    },
+    {
+      id: "matcha-lava",
+      name: "Matcha Lava",
+      note: "White chocolate mousse with a matcha lava centre that runs when you cut it.",
+      spec: '6" round · serves 10 · matcha',
+      price: 92,
+      views: "83K views",
+      photo: "",
+      tone: { style: "lava", icing: "#F4F1E4", top: "#FAF7EC", lava: "#A8C93B", accent: "#8FB43A" }
+    },
+    {
+      id: "mango-jelly",
+      name: "Mango Jelly Chiffon",
+      note: "Chiffon sponge and light cream under set fruit jelly, cut fresh on the morning.",
+      spec: '7" round · serves 12 · mango',
+      price: 86,
+      views: "189K views",
+      photo: "",
+      tone: { style: "fruit", icing: "#F7F1E0", top: "#FBF6E9", fruit: "#F2A93C", accent: "#EE8BA0" }
+    }
+  ];
+
+  /* ------------------------------------------------------
+     THE FEATURED FILM
+     Point `cake` at whichever id in CAKES the film is about,
+     and put the film's own title in `title`. Everything on
+     the feature block — art, price, spec, order button —
+     follows from the cake it names.
+     ------------------------------------------------------ */
+  var FEATURE = {
+    cake: "strawberry-matcha",
+    title: "Strawberry mousse, poured into a matcha shell",
+    blurb:
+      "The one everybody sends to a friend. Strawberry mousse goes into a " +
+      "matcha chiffon shell, the mirror goes over the top, and the whole " +
+      "thing gets cut open at the end.",
+    strap: "Watch it, then order it",
+    url: "https://www.youtube.com/watch?v=-uyI0TjhXdk"
+  };
+
+  var FILMS = [
+    { title: "Strawberry into the matcha shell", views: "1.8M views", photo: "", tone: CAKES[0].tone },
+    { title: "Matcha &amp; Pistachio Choc-Shell", views: "580K views", photo: "", tone: CAKES[1].tone },
+    { title: "Chiffon sponge, four layers", views: "577K views", photo: "", tone: CAKES[2] },
+    {
+      title: "The shell comes off",
+      views: "498K views",
+      photo: "",
+      tone: { style: "shell", icing: "#A2C33A", top: "#B4D64C", hem: "#F5F1E2", accent: "#F5F1E2" }
+    }
+  ];
+
+  /* ------------------------------------------------------
+     Ticker
+     ------------------------------------------------------ */
+  var LINES = [
+    "Matcha lava", "Choc-shell", "Chiffon sponge", "Mirror glaze",
+    "Black gloves, clean bench", "No music, no talking", "Est. 2017"
+  ];
+  var tickerHTML = "";
+  for (var pass = 0; pass < 2; pass++) {
+    LINES.forEach(function (line, i) {
+      tickerHTML += (i % 2 ? "<span><b>" + line + "</b></span>" : "<span>" + line + "</span>") + "<span>·</span>";
+    });
+  }
+  el("ticker").innerHTML = tickerHTML;
+
+  /* ------------------------------------------------------
+     Collection
+     ------------------------------------------------------ */
+  var grid = el("grid");
+  CAKES.forEach(function (cake, i) {
+    var tile = document.createElement("article");
+    tile.className = "tile rise";
+    tile.style.transitionDelay = (i % 3) * 70 + "ms";
+    tile.innerHTML =
+      '<div class="tile__shot"' + (cake.photo ? ' style="--shot: url(\'' + cake.photo + '\')"' : "") + ">" +
+        (cake.photo ? "" : draw(cake.tone || cake, i + 1)) +
+        '<span class="tile__views">' + cake.views + "</span>" +
+      "</div>" +
+      '<div class="tile__body">' +
+        '<div class="tile__top">' +
+          '<h3 class="tile__name">' + cake.name + "</h3>" +
+          '<span class="tile__price">' + money(cake.price) + "</span>" +
+        "</div>" +
+        '<p class="tile__note">' + cake.note + "</p>" +
+        '<p class="tile__spec">' + cake.spec + "</p>" +
+        '<button class="tile__add" type="button">Add to box</button>' +
+      "</div>";
+
+    tile.querySelector(".tile__add").addEventListener("click", function () {
+      var btn = this;
+      add({
+        key: cake.id,
+        name: cake.name,
+        meta: cake.spec,
+        price: cake.price,
+        art: chip(cake.tone || cake)
+      });
+      btn.textContent = "In your box";
+      btn.dataset.state = "added";
+      window.setTimeout(function () { btn.textContent = "Add to box"; delete btn.dataset.state; }, 1600);
+    });
+
+    grid.appendChild(tile);
+  });
+
+  /* ------------------------------------------------------
+     Featured film
+     ------------------------------------------------------ */
+  var star = null;
+  CAKES.forEach(function (c) { if (c.id === FEATURE.cake) { star = c; } });
+
+  if (star) {
+    var starTone = star.tone || star;
+    var frameEl = el("featureFrame");
+    if (star.photo) {
+      frameEl.style.setProperty("--shot", "url('" + star.photo + "')");
+    } else {
+      frameEl.insertAdjacentHTML("afterbegin", draw(
+        Object.assign({}, starTone, { grow: 35 }), 31
+      ));
+    }
+    frameEl.href = FEATURE.url;
+    el("featureWatch").href = FEATURE.url;
+    el("featureViews").textContent = star.views;
+    el("featureStrap").textContent = FEATURE.strap;
+    el("featureTitle").innerHTML = FEATURE.title;
+    el("featureBlurb").textContent = FEATURE.blurb;
+    el("featurePrice").textContent = money(star.price);
+    el("featureSpec").textContent = star.spec;
+
+    el("featureAdd").addEventListener("click", function () {
+      var btn = this;
+      add({ key: star.id, name: star.name, meta: star.spec, price: star.price, art: chip(starTone) });
+      btn.textContent = "In your box";
+      window.setTimeout(function () { btn.textContent = "Order this one"; }, 1600);
+    });
+  }
+
+  /* ------------------------------------------------------
+     Studio strip
+     ------------------------------------------------------ */
+  var films = el("films");
+  FILMS.forEach(function (f, i) {
+    var fig = document.createElement("figure");
+    fig.className = "film";
+    if (f.photo) { fig.style.setProperty("--shot", "url('" + f.photo + "')"); }
+    fig.innerHTML =
+      (f.photo ? "" : draw(f.tone, i + 21)) +
+      '<span class="film__scrim"></span>' +
+      '<span class="film__play" aria-hidden="true"></span>' +
+      "<figcaption>" + f.title + "</figcaption>" +
+      '<span class="film__views">' + f.views + "</span>";
+    films.appendChild(fig);
+  });
+
+  /* ------------------------------------------------------
+     Meter
+     ------------------------------------------------------ */
+  var meter = el("meter");
+  for (var m = 0; m < 44; m++) {
+    var bar = document.createElement("span");
+    bar.style.animationDelay = (m * 0.055).toFixed(2) + "s";
+    bar.style.animationDuration = (1.5 + (m % 5) * 0.18).toFixed(2) + "s";
+    meter.appendChild(bar);
+  }
+
+  /* ------------------------------------------------------
+     Configurator
+     ------------------------------------------------------ */
+  var OPTIONS = {
+    size: {
+      node: el("optSize"), picked: 1,
+      items: [
+        { label: '4" single', add: 0, serves: 4 },
+        { label: '6" round', add: 30, serves: 10 },
+        { label: '7" round', add: 54, serves: 12 },
+        { label: "Slab", add: 46, serves: 8 }
+      ]
+    },
+    sponge: {
+      node: el("optSponge"), picked: 0,
+      items: [
+        { label: "Vanilla chiffon", add: 0, dot: "#EFDCA4" },
+        { label: "Matcha chiffon", add: 10, dot: "#A8C93B" },
+        { label: "Dark chocolate", add: 8, dot: "#3A2620" },
+        { label: "Pistachio", add: 14, dot: "#B5C46B" }
+      ]
+    },
+    centre: {
+      node: el("optCentre"), picked: 0,
+      items: [
+        { label: "Fresh cream", add: 0, dot: "#F7F3E6" },
+        { label: "Matcha lava", add: 16, dot: "#A8C93B" },
+        { label: "Strawberry mousse", add: 12, dot: "#EFA7B8" },
+        { label: "Hazelnut praline", add: 15, dot: "#C99356" }
+      ]
+    },
+    coat: {
+      node: el("optCoat"), picked: 0,
+      items: [
+        { label: "Naked layers", add: 0, dot: "#F7F3E6" },
+        { label: "Mirror glaze", add: 22, dot: "#EFA7B8" },
+        { label: "Chocolate shell", add: 28, dot: "#3A2822" },
+        { label: "Fruit jelly top", add: 18, dot: "#F2A93C" }
+      ]
+    }
+  };
+
+  var BASE = 48;
+
+  function paintOptions() {
+    Object.keys(OPTIONS).forEach(function (key) {
+      var group = OPTIONS[key];
+      group.node.innerHTML = "";
+      group.items.forEach(function (item, i) {
+        var chipEl = document.createElement("button");
+        chipEl.type = "button";
+        chipEl.className = "chip";
+        chipEl.setAttribute("aria-pressed", String(i === group.picked));
+        chipEl.innerHTML =
+          (item.dot ? '<span class="chip__dot" style="background:' + item.dot + '"></span>' : "") +
+          "<span>" + item.label + "</span>" +
+          (item.add ? '<span class="chip__plus">+' + item.add + "</span>" : "");
+        chipEl.addEventListener("click", function () {
+          group.picked = i;
+          paintOptions();
+          paintTicket();
+        });
+        group.node.appendChild(chipEl);
+      });
+    });
+  }
+
+  function chosen(key) { return OPTIONS[key].items[OPTIONS[key].picked]; }
+  function makerTotal() { return BASE + chosen("size").add + chosen("sponge").add + chosen("centre").add + chosen("coat").add; }
+
+  /* The preview redraws from the four choices, so people can
+     watch the cake change as they pick. */
+  function makerTone() {
+    var sponges = ["#EFDCA4", "#B9CC63", "#3A2620", "#C3CE86"];
+    var creams = ["#F7F3E6", "#A8C93B", "#EFA7B8", "#C99356"];
+    var sponge = sponges[OPTIONS.sponge.picked];
+    var cream = creams[OPTIONS.centre.picked];
+    var coat = OPTIONS.coat.picked;
+    var grow = [40, 50, 57, 60][OPTIONS.size.picked];
+
+    if (coat === 0) {
+      return {
+        grow: grow,
+        layers: [
+          [cream, 10], [sponge, 19, true], [cream, 12],
+          [sponge, 19, true], [cream, 12], [sponge, 28, true]
+        ]
+      };
+    }
+    if (coat === 1) {
+      return { grow: grow, style: "mirror", icing: cream, top: cream, accent: sponge };
+    }
+    if (coat === 2) {
+      return { grow: grow, style: "shell", icing: "#3A2822", top: "#48332B", hem: sponge, accent: cream };
+    }
+    return { grow: grow, style: "fruit", icing: "#F7F1E0", top: "#FBF6E9", fruit: "#F2A93C", accent: cream };
+  }
+
+  function paintTicket() {
+    var list = el("ticketList");
+    list.innerHTML = "";
+    [["Size", chosen("size").label], ["Sponge", chosen("sponge").label],
+     ["Centre", chosen("centre").label], ["Coating", chosen("coat").label]
+    ].forEach(function (pair) {
+      var li = document.createElement("li");
+      li.innerHTML = "<span>" + pair[0] + "</span><span>" + pair[1] + "</span>";
+      list.appendChild(li);
+    });
+    el("ticketTotal").textContent = money(makerTotal());
+    el("ticketServes").textContent = "Serves " + chosen("size").serves;
+    el("ticketPic").innerHTML = draw(makerTone(), 5);
+  }
+
+  el("ticketAdd").addEventListener("click", function () {
+    var btn = this;
+    add({
+      key: "custom-" + OPTIONS.size.picked + OPTIONS.sponge.picked + OPTIONS.centre.picked + OPTIONS.coat.picked,
+      name: "Your cake",
+      meta: chosen("size").label + " · " + chosen("sponge").label + " · " + chosen("coat").label,
+      price: makerTotal(),
+      art: chip(makerTone())
+    });
+    btn.textContent = "Added to your box";
+    window.setTimeout(function () { btn.textContent = "Add to box"; }, 1600);
+  });
+
+  paintOptions();
+  paintTicket();
+
+  /* ------------------------------------------------------
+     Box
+     ------------------------------------------------------ */
+  var box = [];
+  var drawer = el("drawer");
+  var scrim = el("scrim");
+
+  function add(item) {
+    var found = null;
+    for (var i = 0; i < box.length; i++) { if (box[i].key === item.key) { found = box[i]; break; } }
+    if (found) { found.qty += 1; } else { item.qty = 1; box.push(item); }
+    paintBox();
+    openBox();
+  }
+
+  function bump(key, delta) {
+    for (var i = 0; i < box.length; i++) {
+      if (box[i].key === key) {
+        box[i].qty += delta;
+        if (box[i].qty <= 0) { box.splice(i, 1); }
+        break;
+      }
+    }
+    paintBox();
+  }
+
+  function paintBox() {
+    var body = el("drawerBody");
+    var count = 0, sum = 0;
+    box.forEach(function (b) { count += b.qty; sum += b.qty * b.price; });
+
+    el("basketCount").textContent = count;
+    el("basketCount").dataset.empty = String(count === 0);
+    el("tallyTotal").textContent = money(sum);
+    el("checkout").disabled = count === 0;
+
+    if (!box.length) {
+      body.innerHTML =
+        '<div class="empty">' +
+          '<span class="label label--go">Nothing in here yet</span>' +
+          "<p>Add one of the six, or build your own.</p>" +
+        "</div>";
+      return;
+    }
+
+    body.innerHTML = "";
+    box.forEach(function (b) {
+      var row = document.createElement("div");
+      row.className = "row";
+      row.innerHTML =
+        '<div class="row__chip" style="--shot: ' + b.art + '"></div>' +
+        "<div>" +
+          '<div class="row__name">' + b.name + "</div>" +
+          '<div class="row__meta">' + b.meta + "</div>" +
+        "</div>" +
+        '<div class="row__right">' +
+          '<span class="row__price">' + money(b.qty * b.price) + "</span>" +
+          '<span class="qty">' +
+            '<button type="button" aria-label="One fewer">−</button>' +
+            "<span>" + b.qty + "</span>" +
+            '<button type="button" aria-label="One more">+</button>' +
+          "</span>" +
+        "</div>";
+      var btns = row.querySelectorAll(".qty button");
+      btns[0].addEventListener("click", function () { bump(b.key, -1); });
+      btns[1].addEventListener("click", function () { bump(b.key, 1); });
+      body.appendChild(row);
+    });
+  }
+
+  function openBox() {
+    drawer.dataset.open = "true";
+    scrim.dataset.open = "true";
+    drawer.setAttribute("aria-hidden", "false");
+    el("drawerX").focus();
+  }
+  function closeBox() {
+    drawer.dataset.open = "false";
+    scrim.dataset.open = "false";
+    drawer.setAttribute("aria-hidden", "true");
+    el("basketBtn").focus();
+  }
+
+  el("basketBtn").addEventListener("click", openBox);
+  el("drawerX").addEventListener("click", closeBox);
+  scrim.addEventListener("click", closeBox);
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && drawer.dataset.open === "true") { closeBox(); }
+  });
+  el("checkout").addEventListener("click", function () { this.textContent = "Choosing your delivery date…"; });
+
+  paintBox();
+
+  /* ------------------------------------------------------
+     Reveal on scroll
+     ------------------------------------------------------ */
+  if ("IntersectionObserver" in window) {
+    var watcher = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.dataset.seen = "true";
+          watcher.unobserve(entry.target);
+        }
+      });
+    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
+    document.querySelectorAll(".rise").forEach(function (node) { watcher.observe(node); });
+  } else {
+    document.querySelectorAll(".rise").forEach(function (node) { node.dataset.seen = "true"; });
+  }
+})();
+</script>
+
+</body>
+</html>
