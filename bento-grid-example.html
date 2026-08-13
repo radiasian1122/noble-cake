@@ -1,0 +1,806 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Noble Cake - Bento Grid Examples</title>
+<style>
+/* Include base Noble Cake design tokens */
+:root {
+  --ink:        #0A0C0A;
+  --ink-deep:   #060706;
+  --ink-raised: #131611;
+  --ink-lift:   #1B1F18;
+  --line:       #262B23;
+  --line-soft:  #1D211B;
+  --cream:      #F1F1E7;
+  --cream-dim:  #CBCFC0;
+  --muted:      #8D958A;
+  --muted-deep: #676F60;
+  --matcha:     #A8C93B;
+  --matcha-lit: #BCDD52;
+  --berry:      #EE8BA0;
+  --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --display: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--ink);
+  color: var(--cream);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.6;
+  padding: 40px 20px;
+}
+
+.demo-section {
+  max-width: 1400px;
+  margin: 0 auto 80px;
+}
+
+.demo-header {
+  margin-bottom: 40px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+.demo-header h2 {
+  font-family: var(--display);
+  font-size: 36px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  margin: 0 0 12px;
+  color: var(--matcha);
+}
+
+.demo-header p {
+  color: var(--muted);
+  margin: 0;
+  font-size: 15px;
+}
+
+/* Demo card styling */
+.demo-card {
+  background: var(--ink-raised);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+}
+
+.demo-card:hover {
+  border-color: var(--matcha);
+}
+
+.demo-card__image {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  background: linear-gradient(135deg, var(--ink-deep), var(--ink-lift));
+  display: grid;
+  place-items: center;
+  color: var(--muted-deep);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  position: relative;
+  overflow: hidden;
+}
+
+.demo-card--featured .demo-card__image {
+  aspect-ratio: 16 / 9;
+}
+
+.demo-card__image::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 60%;
+  height: 60%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(168,201,59,0.15), transparent 70%);
+}
+
+.demo-card__body {
+  padding: 18px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.demo-card__title {
+  font-family: var(--display);
+  font-size: 18px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  margin: 0;
+  color: var(--cream);
+}
+
+.demo-card__meta {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted-deep);
+  margin: 0;
+}
+
+.demo-card__price {
+  font-family: var(--display);
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--matcha);
+  margin-top: auto;
+}
+
+/* Badge for item type */
+.demo-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 6px 12px;
+  background: rgba(6,7,6,0.85);
+  backdrop-filter: blur(6px);
+  border: 1px solid var(--matcha);
+  border-radius: 999px;
+  font-family: var(--mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--matcha);
+  z-index: 10;
+}
+
+/* Code block styling */
+.demo-code {
+  background: var(--ink-deep);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 20px;
+  margin: 30px 0;
+  overflow-x: auto;
+}
+
+.demo-code pre {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--cream-dim);
+}
+
+.demo-code code {
+  color: var(--matcha);
+}
+
+/* Navigation */
+.demo-nav {
+  position: sticky;
+  top: 20px;
+  padding: 20px;
+  background: var(--ink-raised);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  margin-bottom: 40px;
+}
+
+.demo-nav h3 {
+  font-family: var(--display);
+  font-size: 14px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--matcha);
+  margin: 0 0 16px;
+}
+
+.demo-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.demo-nav a {
+  display: inline-block;
+  padding: 8px 14px;
+  background: var(--ink-lift);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--cream-dim);
+  text-decoration: none;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+}
+
+.demo-nav a:hover {
+  border-color: var(--matcha);
+  color: var(--matcha);
+}
+</style>
+
+<!-- Include the bento grid system -->
+<link rel="stylesheet" href="bento-grid-system.css">
+</head>
+
+<body>
+
+<div class="demo-nav">
+  <h3>Jump to Example</h3>
+  <ul>
+    <li><a href="#featured-left">Featured Left</a></li>
+    <li><a href="#featured-right">Featured Right</a></li>
+    <li><a href="#collection">Collection</a></li>
+    <li><a href="#asymmetric">Asymmetric</a></li>
+    <li><a href="#studio">Studio Films</a></li>
+    <li><a href="#cakes">Cakes Grid</a></li>
+  </ul>
+</div>
+
+<!-- Example 1: Featured Left -->
+<section class="demo-section" id="featured-left">
+  <div class="demo-header">
+    <h2>Featured Left</h2>
+    <p>Featured item spans 2x2 in top-left corner. Ideal for hero content with supporting items.</p>
+  </div>
+
+  <div class="bento-grid bento-grid--featured-left bento-grid--animate">
+    <div class="bento-item bento-item--featured" data-area="hero">
+      <div class="demo-card demo-card--featured">
+        <div class="demo-card__image">
+          <span class="demo-badge">Featured</span>
+          <span>2x2 Hero</span>
+        </div>
+        <div class="demo-card__body">
+          <h3 class="demo-card__title">Strawberry Matcha Mirror</h3>
+          <p class="demo-card__meta">6" round · serves 10</p>
+          <span class="demo-card__price">$96</span>
+        </div>
+      </div>
+    </div>
+    <div class="bento-item">
+      <div class="demo-card">
+        <div class="demo-card__image"><span>1x1</span></div>
+        <div class="demo-card__body">
+          <h3 class="demo-card__title">Matcha Lava</h3>
+          <p class="demo-card__meta">6" round · serves 10</p>
+          <span class="demo-card__price">$92</span>
+        </div>
+      </div>
+    </div>
+    <div class="bento-item">
+      <div class="demo-card">
+        <div class="demo-card__image"><span>1x1</span></div>
+        <div class="demo-card__body">
+          <h3 class="demo-card__title">Choc-Shell</h3>
+          <p class="demo-card__meta">6" round · serves 10</p>
+          <span class="demo-card__price">$94</span>
+        </div>
+      </div>
+    </div>
+    <div class="bento-item">
+      <div class="demo-card">
+        <div class="demo-card__image"><span>1x1</span></div>
+        <div class="demo-card__body">
+          <h3 class="demo-card__title">Four-Layer Chiffon</h3>
+          <p class="demo-card__meta">7" round · serves 12</p>
+          <span class="demo-card__price">$72</span>
+        </div>
+      </div>
+    </div>
+    <div class="bento-item">
+      <div class="demo-card">
+        <div class="demo-card__image"><span>1x1</span></div>
+        <div class="demo-card__body">
+          <h3 class="demo-card__title">Hazelnut Brick</h3>
+          <p class="demo-card__meta">Slab · serves 8</p>
+          <span class="demo-card__price">$88</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="demo-code">
+    <pre><code>&lt;div class="bento-grid bento-grid--featured-left"&gt;
+  &lt;div class="bento-item bento-item--featured" data-area="hero"&gt;
+    &lt;!-- Featured content --&gt;
+  &lt;/div&gt;
+  &lt;div class="bento-item"&gt;...&lt;/div&gt;
+  &lt;div class="bento-item"&gt;...&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+  </div>
+</section>
+
+<!-- Example 2: Featured Right -->
+<section class="demo-section" id="featured-right">
+  <div class="demo-header">
+    <h2>Featured Right</h2>
+    <p>Featured item in top-right corner. Creates visual balance with left-aligned content.</p>
+  </div>
+
+  <div class="bento-grid bento-grid--featured-right bento-grid--animate">
+    <div class="bento-item">
+      <div class="demo-card">
+        <div class="demo-card__image"><span>1x1</span></div>
+        <div class="demo-card__body">
+          <h3 class="demo-card__title">Matcha Lava</h3>
+          <p class="demo-card__meta">6" round · serves 10</p>
+          <span class="demo-card__price">$92</span>
+        </div>
+      </div>
+    </div>
+    <div class="bento-item">
+      <div class="demo-card">
+        <div class="demo-card__image"><span>1x1</span></div>
+        <div class="demo-card__body">
+          <h3 class="demo-card__title">Choc-Shell</h3>
+          <p class="demo-card__meta">6" round · serves 10</p>
+          <span class="demo-card__price">$94</span>
+        </div>
+      </div>
+    </div>
+    <div class="bento-item bento-item--featured" data-area="hero">
+      <div class="demo-card demo-card--featured">
+        <div class="demo-card__image">
+          <span class="demo-badge">Featured</span>
+          <span>2x2 Hero</span>
+        </div>
+        <div class="demo-card__body">
+          <h3 class="demo-card__title">Mango Jelly Chiffon</h3>
+          <p class="demo-card__meta">7" round · serves 12</p>
+          <span class="demo-card__price">$86</span>
+        </div>
+      </div>
+    </div>
+    <div class="bento-item">
+      <div class="demo-card">
+        <div class="demo-card__image"><span>1x1</span></div>
+        <div class="demo-card__body">
+          <h3 class="demo-card__title">Four-Layer Chiffon</h3>
+          <p class="demo-card__meta">7" round · serves 12</p>
+          <span class="demo-card__price">$72</span>
+        </div>
+      </div>
+    </div>
+    <div class="bento-item">
+      <div class="demo-card">
+        <div class="demo-card__image"><span>1x1</span></div>
+        <div class="demo-card__body">
+          <h3 class="demo-card__title">Hazelnut Brick</h3>
+          <p class="demo-card__meta">Slab · serves 8</p>
+          <span class="demo-card__price">$88</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="demo-code">
+    <pre><code>&lt;div class="bento-grid bento-grid--featured-right"&gt;
+  &lt;div class="bento-item"&gt;...&lt;/div&gt;
+  &lt;div class="bento-item"&gt;...&lt;/div&gt;
+  &lt;div class="bento-item bento-item--featured" data-area="hero"&gt;
+    &lt;!-- Featured content --&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</code></pre>
+  </div>
+</section>
+
+<!-- Example 3: Collection -->
+<section class="demo-section" id="collection">
+  <div class="demo-header">
+    <h2>Collection Grid</h2>
+    <p>6-column layout with multiple featured items. Perfect for large product collections.</p>
+  </div>
+
+  <div class="bento-grid bento-grid--collection bento-grid--animate">
+    <div class="bento-item bento-item--featured" data-area="hero1">
+      <div class="demo-card demo-card--featured">
+        <div class="demo-card__image">
+          <span class="demo-badge">Featured</span>
+          <span>2x2</span>
+        </div>
+        <div class="demo-card__body">
+          <h3 class="demo-card__title">Strawberry Matcha</h3>
+          <p class="demo-card__meta">Most popular</p>
+          <span class="demo-card__price">$96</span>
+        </div>
+      </div>
+    </div>
+    <div class="bento-item">
+      <div class="demo-card">
+        <div class="demo-card__image"><span>1x1</span></div>
+        <div class="demo-card__body">
+          <h3 class="demo-card__title">Matcha Lava</h3>
+          <span class="demo-card__price">$92</span>
+        </div>
+      </div>
+    </div>
+    <div class="bento-item">
+      <div class="demo-card">
+        <div class="demo-card__image"><span>1x1</span></div>
+        <div class="demo-card__body">
+          <h3 class="demo-card__title">Choc-Shell</h3>
+          <span class="demo-card__price">$94</span>
+        </div>
+      </div>
+    </div>
+    <div class="bento-item bento-item--featured" data-area="hero2">
+      <div class="demo-card demo-card--featured">
+        <div class="demo-card__image">
+          <span class="demo-badge">Featured</span>
+          <span>2x2</span>
+        </div>
+        <div class="demo-card__body">
+          <h3 class="demo-card__title">Hazelnut Brick</h3>
+          <p class="demo-card__meta">Chef's choice</p>
+          <span class="demo-card__price">$88</span>
+        </div>
+      </div>
+    </div>
+    <div class="bento-item">
+      <div class="demo-card">
+        <div class="demo-card__image"><span>1x1</span></div>
+        <div class="demo-card__body">
+          <h3 class="demo-card__title">Chiffon</h3>
+          <span class="demo-card__price">$72</span>
+        </div>
+      </div>
+    </div>
+    <div class="bento-item">
+      <div class="demo-card">
+        <div class="demo-card__image"><span>1x1</span></div>
+        <div class="demo-card__body">
+          <h3 class="demo-card__title">Mango Jelly</h3>
+          <span class="demo-card__price">$86</span>
+        </div>
+      </div>
+    </div>
+    <div class="bento-item">
+      <div class="demo-card">
+        <div class="demo-card__image"><span>1x1</span></div>
+        <div class="demo-card__body">
+          <h3 class="demo-card__title">Custom Cake</h3>
+          <span class="demo-card__price">$78</span>
+        </div>
+      </div>
+    </div>
+    <div class="bento-item">
+      <div class="demo-card">
+        <div class="demo-card__image"><span>1x1</span></div>
+        <div class="demo-card__body">
+          <h3 class="demo-card__title">Seasonal</h3>
+          <span class="demo-card__price">$84</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="demo-code">
+    <pre><code>&lt;div class="bento-grid bento-grid--collection"&gt;
+  &lt;div class="bento-item bento-item--featured" data-area="hero1"&gt;...&lt;/div&gt;
+  &lt;div class="bento-item"&gt;...&lt;/div&gt;
+  &lt;div class="bento-item bento-item--featured" data-area="hero2"&gt;...&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+  </div>
+</section>
+
+<!-- Example 4: Asymmetric -->
+<section class="demo-section" id="asymmetric">
+  <div class="demo-header">
+    <h2>Asymmetric Layout</h2>
+    <p>Complex 5-column layout with mixed item sizes for maximum visual interest.</p>
+  </div>
+
+  <div class="bento-grid bento-grid--asymmetric bento-grid--animate">
+    <div class="bento-item bento-item--featured" data-area="hero">
+      <div class="demo-card demo-card--featured">
+        <div class="demo-card__image">
+          <span class="demo-badge">2x2 Featured</span>
+          <span>Hero</span>
+        </div>
+        <div class="demo-card__body">
+          <h3 class="demo-card__title">Feature Cake</h3>
+          <p class="demo-card__meta">This week's special</p>
+          <span class="demo-card__price">$96</span>
+        </div>
+      </div>
+    </div>
+    <div class="bento-item">
+      <div class="demo-card">
+        <div class="demo-card__image"><span>1x1</span></div>
+        <div class="demo-card__body">
+          <h3 class="demo-card__title">Item 1</h3>
+          <span class="demo-card__price">$72</span>
+        </div>
+      </div>
+    </div>
+    <div class="bento-item">
+      <div class="demo-card">
+        <div class="demo-card__image"><span>1x1</span></div>
+        <div class="demo-card__body">
+          <h3 class="demo-card__title">Item 2</h3>
+          <span class="demo-card__price">$78</span>
+        </div>
+      </div>
+    </div>
+    <div class="bento-item">
+      <div class="demo-card">
+        <div class="demo-card__image"><span>1x1</span></div>
+        <div class="demo-card__body">
+          <h3 class="demo-card__title">Item 3</h3>
+          <span class="demo-card__price">$84</span>
+        </div>
+      </div>
+    </div>
+    <div class="bento-item">
+      <div class="demo-card">
+        <div class="demo-card__image"><span>1x1</span></div>
+        <div class="demo-card__body">
+          <h3 class="demo-card__title">Item 4</h3>
+          <span class="demo-card__price">$88</span>
+        </div>
+      </div>
+    </div>
+    <div class="bento-item bento-item--tall" data-area="tall">
+      <div class="demo-card">
+        <div class="demo-card__image">
+          <span class="demo-badge">1x2 Tall</span>
+          <span>Tall</span>
+        </div>
+        <div class="demo-card__body">
+          <h3 class="demo-card__title">Tall Item</h3>
+          <span class="demo-card__price">$92</span>
+        </div>
+      </div>
+    </div>
+    <div class="bento-item">
+      <div class="demo-card">
+        <div class="demo-card__image"><span>1x1</span></div>
+        <div class="demo-card__body">
+          <h3 class="demo-card__title">Item 5</h3>
+          <span class="demo-card__price">$76</span>
+        </div>
+      </div>
+    </div>
+    <div class="bento-item">
+      <div class="demo-card">
+        <div class="demo-card__image"><span>1x1</span></div>
+        <div class="demo-card__body">
+          <h3 class="demo-card__title">Item 6</h3>
+          <span class="demo-card__price">$82</span>
+        </div>
+      </div>
+    </div>
+    <div class="bento-item">
+      <div class="demo-card">
+        <div class="demo-card__image"><span>1x1</span></div>
+        <div class="demo-card__body">
+          <h3 class="demo-card__title">Item 7</h3>
+          <span class="demo-card__price">$86</span>
+        </div>
+      </div>
+    </div>
+    <div class="bento-item bento-item--wide" data-area="wide">
+      <div class="demo-card">
+        <div class="demo-card__image">
+          <span class="demo-badge">2x1 Wide</span>
+          <span>Wide</span>
+        </div>
+        <div class="demo-card__body">
+          <h3 class="demo-card__title">Wide Item</h3>
+          <span class="demo-card__price">$94</span>
+        </div>
+      </div>
+    </div>
+    <div class="bento-item">
+      <div class="demo-card">
+        <div class="demo-card__image"><span>1x1</span></div>
+        <div class="demo-card__body">
+          <h3 class="demo-card__title">Item 8</h3>
+          <span class="demo-card__price">$80</span>
+        </div>
+      </div>
+    </div>
+    <div class="bento-item">
+      <div class="demo-card">
+        <div class="demo-card__image"><span>1x1</span></div>
+        <div class="demo-card__body">
+          <h3 class="demo-card__title">Item 9</h3>
+          <span class="demo-card__price">$74</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="demo-code">
+    <pre><code>&lt;div class="bento-grid bento-grid--asymmetric"&gt;
+  &lt;div class="bento-item bento-item--featured" data-area="hero"&gt;...&lt;/div&gt;
+  &lt;div class="bento-item bento-item--tall" data-area="tall"&gt;...&lt;/div&gt;
+  &lt;div class="bento-item bento-item--wide" data-area="wide"&gt;...&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+  </div>
+</section>
+
+<!-- Example 5: Studio Films -->
+<section class="demo-section" id="studio">
+  <div class="demo-header">
+    <h2>Studio Films Grid</h2>
+    <p>Optimized for video thumbnails with portrait aspect ratios. 4-column desktop layout.</p>
+  </div>
+
+  <div class="bento-grid bento-grid--studio bento-grid--animate">
+    <div class="bento-item bento-item--featured">
+      <div class="demo-card demo-card--featured">
+        <div class="demo-card__image">
+          <span class="demo-badge">Featured Film</span>
+          <span>2x2</span>
+        </div>
+        <div class="demo-card__body">
+          <h3 class="demo-card__title">The Pour</h3>
+          <p class="demo-card__meta">1.8M views</p>
+        </div>
+      </div>
+    </div>
+    <div class="bento-item">
+      <div class="demo-card">
+        <div class="demo-card__image"><span>Film 1</span></div>
+        <div class="demo-card__body">
+          <h3 class="demo-card__title">The Shell Crack</h3>
+          <p class="demo-card__meta">580K views</p>
+        </div>
+      </div>
+    </div>
+    <div class="bento-item">
+      <div class="demo-card">
+        <div class="demo-card__image"><span>Film 2</span></div>
+        <div class="demo-card__body">
+          <h3 class="demo-card__title">Four Layers</h3>
+          <p class="demo-card__meta">577K views</p>
+        </div>
+      </div>
+    </div>
+    <div class="bento-item">
+      <div class="demo-card">
+        <div class="demo-card__image"><span>Film 3</span></div>
+        <div class="demo-card__body">
+          <h3 class="demo-card__title">Mirror Glaze</h3>
+          <p class="demo-card__meta">498K views</p>
+        </div>
+      </div>
+    </div>
+    <div class="bento-item">
+      <div class="demo-card">
+        <div class="demo-card__image"><span>Film 4</span></div>
+        <div class="demo-card__body">
+          <h3 class="demo-card__title">The First Cut</h3>
+          <p class="demo-card__meta">297K views</p>
+        </div>
+      </div>
+    </div>
+    <div class="bento-item">
+      <div class="demo-card">
+        <div class="demo-card__image"><span>Film 5</span></div>
+        <div class="demo-card__body">
+          <h3 class="demo-card__title">Lava Flow</h3>
+          <p class="demo-card__meta">189K views</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="demo-code">
+    <pre><code>&lt;div class="bento-grid bento-grid--studio"&gt;
+  &lt;div class="bento-item bento-item--featured"&gt;...&lt;/div&gt;
+  &lt;div class="bento-item"&gt;...&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+  </div>
+</section>
+
+<!-- Example 6: Cakes Grid (Auto-first-featured) -->
+<section class="demo-section" id="cakes">
+  <div class="demo-header">
+    <h2>Cakes Collection Grid</h2>
+    <p>Automatic featured treatment for first item. 3-column desktop layout.</p>
+  </div>
+
+  <div class="bento-grid bento-grid--cakes bento-grid--animate">
+    <div class="bento-item">
+      <div class="demo-card">
+        <div class="demo-card__image">
+          <span class="demo-badge">Auto-Featured</span>
+          <span>First Item</span>
+        </div>
+        <div class="demo-card__body">
+          <h3 class="demo-card__title">Strawberry Matcha</h3>
+          <p class="demo-card__meta">6" round · serves 10</p>
+          <span class="demo-card__price">$96</span>
+        </div>
+      </div>
+    </div>
+    <div class="bento-item">
+      <div class="demo-card">
+        <div class="demo-card__image"><span>1x1</span></div>
+        <div class="demo-card__body">
+          <h3 class="demo-card__title">Matcha Lava</h3>
+          <p class="demo-card__meta">6" round · serves 10</p>
+          <span class="demo-card__price">$92</span>
+        </div>
+      </div>
+    </div>
+    <div class="bento-item">
+      <div class="demo-card">
+        <div class="demo-card__image"><span>1x1</span></div>
+        <div class="demo-card__body">
+          <h3 class="demo-card__title">Choc-Shell</h3>
+          <p class="demo-card__meta">6" round · serves 10</p>
+          <span class="demo-card__price">$94</span>
+        </div>
+      </div>
+    </div>
+    <div class="bento-item">
+      <div class="demo-card">
+        <div class="demo-card__image"><span>1x1</span></div>
+        <div class="demo-card__body">
+          <h3 class="demo-card__title">Four-Layer Chiffon</h3>
+          <p class="demo-card__meta">7" round · serves 12</p>
+          <span class="demo-card__price">$72</span>
+        </div>
+      </div>
+    </div>
+    <div class="bento-item">
+      <div class="demo-card">
+        <div class="demo-card__image"><span>1x1</span></div>
+        <div class="demo-card__body">
+          <h3 class="demo-card__title">Hazelnut Brick</h3>
+          <p class="demo-card__meta">Slab · serves 8</p>
+          <span class="demo-card__price">$88</span>
+        </div>
+      </div>
+    </div>
+    <div class="bento-item">
+      <div class="demo-card">
+        <div class="demo-card__image"><span>1x1</span></div>
+        <div class="demo-card__body">
+          <h3 class="demo-card__title">Mango Jelly</h3>
+          <p class="demo-card__meta">7" round · serves 12</p>
+          <span class="demo-card__price">$86</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="demo-code">
+    <pre><code>&lt;div class="bento-grid bento-grid--cakes"&gt;
+  &lt;!-- First item automatically spans 2x2 on desktop --&gt;
+  &lt;div class="bento-item"&gt;...&lt;/div&gt;
+  &lt;div class="bento-item"&gt;...&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+  </div>
+</section>
+
+<div style="text-align: center; padding: 60px 20px; border-top: 1px solid var(--line); margin-top: 80px;">
+  <p style="font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted-deep); margin: 0;">
+    Noble Cake Bento Grid System v1.0
+  </p>
+</div>
+
+</body>
+</html>

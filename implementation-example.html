@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<!--
+  IMPLEMENTATION EXAMPLE
+  This snippet shows where to add the gamification system to index.html
+
+  Add these lines in the locations indicated below:
+-->
+
+<!-- 1. ADD TO <head> (after existing styles) -->
+<link rel="stylesheet" href="gamification-styles.css">
+
+<!-- 2. ADD BEFORE CLOSING </body> (after existing script) -->
+<script src="gamification-system.js"></script>
+<script>
+  // Initialize gamification after page loads
+  document.addEventListener("DOMContentLoaded", function() {
+    // Full configuration (all features enabled)
+    window.NobleGamification.init({
+      enableAchievements: true,   // Achievement tracker + toast notifications
+      enableExploration: true,    // Cake view tracking + progress ring
+      enableLayerReveal: true,    // "See Inside" buttons on tiles
+      enablePourEffect: true,     // Hover pour animation on CTAs
+      enableProgress: true        // Configurator progress indicator
+    });
+
+    console.log("✨ Noble Cake gamification loaded");
+  });
+</script>
+
+<!--
+  ALTERNATIVE: Minimal Configuration
+  Start with core features, add more progressively
+-->
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    // Minimal setup - just exploration and layer reveals
+    window.NobleGamification.init({
+      enableAchievements: false,
+      enableExploration: true,
+      enableLayerReveal: true,
+      enablePourEffect: false,
+      enableProgress: false
+    });
+  });
+</script>
+
+<!--
+  ALTERNATIVE: A/B Testing Setup
+  Use URL parameter to control features
+-->
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const params = new URLSearchParams(window.location.search);
+    const gamified = params.get("gamify") !== "false"; // Default on
+
+    if (gamified) {
+      window.NobleGamification.init({
+        enableAchievements: true,
+        enableExploration: true,
+        enableLayerReveal: true,
+        enablePourEffect: true,
+        enableProgress: true
+      });
+    }
+  });
+</script>
+
+<!--
+  ALTERNATIVE: Feature Detection
+  Only enable features if browser supports them
+-->
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const supportsIntersectionObserver = "IntersectionObserver" in window;
+    const supportsBackdropFilter = CSS.supports("backdrop-filter", "blur(10px)");
+
+    window.NobleGamification.init({
+      enableAchievements: supportsBackdropFilter,
+      enableExploration: supportsIntersectionObserver,
+      enableLayerReveal: true,
+      enablePourEffect: true,
+      enableProgress: true
+    });
+  });
+</script>
+
+<!--
+  COMPLETE EXAMPLE OF MODIFIED index.html
+  (showing just the end of the file)
+-->
+
+  </script> <!-- End of existing script -->
+
+  <!-- GAMIFICATION SYSTEM - ADD HERE -->
+  <link rel="stylesheet" href="gamification-styles.css">
+  <script src="gamification-system.js"></script>
+  <script>
+    (function() {
+      "use strict";
+
+      // Wait for both the page and the core cake system to load
+      document.addEventListener("DOMContentLoaded", function() {
+        // Small delay ensures cake tiles are rendered
+        setTimeout(function() {
+          window.NobleGamification.init({
+            enableAchievements: true,
+            enableExploration: true,
+            enableLayerReveal: true,
+            enablePourEffect: true,
+            enableProgress: true
+          });
+        }, 100);
+      });
+    })();
+  </script>
+
+</body>
+</html>
+
+<!--
+  TESTING URLS
+
+  1. Full experience:
+     http://localhost:8000/index.html
+
+  2. Disable gamification:
+     http://localhost:8000/index.html?gamify=false
+
+  3. Only exploration:
+     http://localhost:8000/index.html?features=exploration
+
+  4. Reset progress:
+     Open console: localStorage.removeItem('nobleCakeProgress')
+-->
+
+<!--
+  VERIFICATION CHECKLIST
+
+  After integration, verify:
+
+  ✓ No console errors
+  ✓ Achievement badge appears in header
+  ✓ Hovering tiles shows "See Inside" button
+  ✓ Clicking "See Inside" reveals layers
+  ✓ Hovering CTAs shows pour effect
+  ✓ Progress bar appears on configurator
+  ✓ Clicking options updates progress
+  ✓ Achievement toast appears on unlock
+  ✓ Clicking achievement badge opens panel
+  ✓ localStorage persists progress
+  ✓ Works on mobile (touch)
+  ✓ Keyboard navigation functional
+  ✓ Reduced motion respected
+-->
+
+<!--
+  DEBUG MODE
+
+  Add this to enable verbose logging:
+-->
+<script>
+  window.NOBLE_DEBUG = true;
+
+  document.addEventListener("DOMContentLoaded", function() {
+    window.NobleGamification.init({
+      enableAchievements: true,
+      enableExploration: true,
+      enableLayerReveal: true,
+      enablePourEffect: true,
+      enableProgress: true
+    });
+
+    // Log state changes
+    const originalSave = localStorage.setItem;
+    localStorage.setItem = function(key, value) {
+      if (key === "nobleCakeProgress") {
+        console.log("📊 Progress updated:", JSON.parse(value));
+      }
+      originalSave.apply(this, arguments);
+    };
+  });
+</script>
+
+<!--
+  ANALYTICS INTEGRATION
+
+  Track gamification events:
+-->
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    window.NobleGamification.init({
+      enableAchievements: true,
+      enableExploration: true,
+      enableLayerReveal: true,
+      enablePourEffect: true,
+      enableProgress: true
+    });
+
+    // Listen for achievement unlocks
+    document.addEventListener("achievementUnlocked", function(e) {
+      // Send to your analytics
+      if (window.gtag) {
+        gtag("event", "achievement_unlocked", {
+          achievement_id: e.detail.id,
+          achievement_name: e.detail.title
+        });
+      }
+    });
+
+    // Listen for progress milestones
+    document.addEventListener("configuratorComplete", function() {
+      if (window.gtag) {
+        gtag("event", "configurator_completed");
+      }
+    });
+  });
+</script>
