@@ -1270,14 +1270,20 @@ body { cursor: none; }
   border-radius: 50%;
   background: var(--matcha);
   pointer-events: none;
-  z-index: 9999;
-  mix-blend-mode: difference;
+  z-index: 99999;
+  mix-blend-mode: normal;
   transform: translate(-50%, -50%);
   transition: width 0.2s ease, height 0.2s ease, opacity 0.2s ease;
   opacity: 0;
 }
 
 .cursor.visible { opacity: 1; }
+
+/* Light mode cursor adjustment */
+[data-theme="light"] .cursor {
+  background: var(--matcha);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+}
 
 .cursor-ring {
   position: fixed;
@@ -1286,7 +1292,7 @@ body { cursor: none; }
   border: 1px solid var(--matcha);
   border-radius: 50%;
   pointer-events: none;
-  z-index: 9998;
+  z-index: 99998;
   transform: translate(-50%, -50%);
   transition: width 0.3s cubic-bezier(0.16, 0.84, 0.44, 1),
               height 0.3s cubic-bezier(0.16, 0.84, 0.44, 1),
@@ -1295,6 +1301,13 @@ body { cursor: none; }
 }
 
 .cursor-ring.visible { opacity: 0.5; }
+
+/* Ensure cursor stays on top of sticky elements */
+.masthead,
+.drawer,
+.scrim {
+  isolation: isolate;
+}
 
 /* Proximity lighting on cards */
 .tile::before,
@@ -2928,11 +2941,13 @@ body { cursor: none; }
     function animateCursor() {
       cursorX += (mouseX - cursorX) * 0.25;
       cursorY += (mouseY - cursorY) * 0.25;
-      cursor.style.transform = "translate(" + cursorX + "px, " + cursorY + "px)";
+      cursor.style.left = cursorX + "px";
+      cursor.style.top = cursorY + "px";
 
       ringX += (mouseX - ringX) * 0.12;
       ringY += (mouseY - ringY) * 0.12;
-      cursorRing.style.transform = "translate(" + ringX + "px, " + ringY + "px)";
+      cursorRing.style.left = ringX + "px";
+      cursorRing.style.top = ringY + "px";
 
       requestAnimationFrame(animateCursor);
     }
