@@ -1,0 +1,364 @@
+/**
+ * THEME SYSTEM - Light & Dark Mode
+ * Comprehensive theme switching with smooth transitions
+ */
+
+/* ============================================================
+   THEME COLOR TOKENS
+   Dark mode (default) and Light mode variants
+   ============================================================ */
+
+:root {
+  /* Dark theme colors (default) */
+  --ink:        #0A0C0A;
+  --ink-deep:   #060706;
+  --ink-raised: #131611;
+  --ink-lift:   #1B1F18;
+  --line:       #262B23;
+  --line-soft:  #1D211B;
+
+  --cream:      #F1F1E7;
+  --cream-dim:  #CBCFC0;
+  --muted:      #8D958A;
+  --muted-deep: #676F60;
+
+  --matcha:     #A8C93B;
+  --matcha-lit: #BCDD52;
+  --matcha-dark: #8BAB2D;
+  --berry:      #EE8BA0;
+  --mango:      #F2A93C;
+  --cocoa:      #3D2620;
+  --blueberry:  #7A5F8E;
+
+  /* Semantic tokens (theme-aware) */
+  --bg-base:      var(--ink);
+  --bg-elevated:  var(--ink-raised);
+  --bg-sunken:    var(--ink-deep);
+  --bg-hover:     var(--ink-lift);
+
+  --text-primary:   var(--cream);
+  --text-secondary: var(--cream-dim);
+  --text-tertiary:  var(--muted);
+  --text-inverse:   var(--ink-deep);
+
+  --border-default: var(--line);
+  --border-soft:    var(--line-soft);
+
+  --accent-primary:   var(--matcha);
+  --accent-bright:    var(--matcha-lit);
+  --accent-dark:      var(--matcha-dark);
+
+  /* Shadow system */
+  --shadow-sm:  0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md:  0 4px 16px rgba(0, 0, 0, 0.4);
+  --shadow-lg:  0 12px 32px rgba(0, 0, 0, 0.5);
+  --shadow-xl:  0 24px 48px rgba(0, 0, 0, 0.6);
+
+  /* Gradient overlays */
+  --gradient-overlay-start: rgba(6, 7, 6, 0);
+  --gradient-overlay-end:   rgba(6, 7, 6, 0.88);
+
+  /* Theme transition */
+  --theme-transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                      color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                      border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                      box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ============================================================
+   LIGHT MODE THEME
+   ============================================================ */
+
+[data-theme="light"] {
+  /* Light mode base colors */
+  --ink:        #F8F9F6;  /* Light background */
+  --ink-deep:   #FFFFFF;  /* Brightest surface */
+  --ink-raised: #F1F3EE;  /* Elevated surface */
+  --ink-lift:   #E8EBE4;  /* Hover surface */
+  --line:       #D4D8CE;  /* Border */
+  --line-soft:  #E1E4DC;  /* Soft border */
+
+  --cream:      #1A1C18;  /* Dark text */
+  --cream-dim:  #3F4339;  /* Secondary text */
+  --muted:      #6B7266;  /* Tertiary text */
+  --muted-deep: #8A9085;  /* Muted text */
+
+  /* Matcha stays vibrant but slightly adjusted for light bg */
+  --matcha:     #8BAB2D;  /* Slightly darker for contrast */
+  --matcha-lit: #A8C93B;  /* Brighter state */
+  --matcha-dark: #6E8A1F; /* Darker state */
+
+  /* Semantic tokens update automatically */
+  --bg-base:      var(--ink);
+  --bg-elevated:  var(--ink-deep);
+  --bg-sunken:    var(--ink-raised);
+  --bg-hover:     var(--ink-lift);
+
+  --text-primary:   var(--cream);
+  --text-secondary: var(--cream-dim);
+  --text-tertiary:  var(--muted);
+  --text-inverse:   var(--ink-deep);
+
+  --border-default: var(--line);
+  --border-soft:    var(--line-soft);
+
+  /* Light mode shadows */
+  --shadow-sm:  0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-md:  0 4px 16px rgba(0, 0, 0, 0.12);
+  --shadow-lg:  0 12px 32px rgba(0, 0, 0, 0.16);
+  --shadow-xl:  0 24px 48px rgba(0, 0, 0, 0.20);
+
+  /* Light gradient overlays */
+  --gradient-overlay-start: rgba(255, 255, 255, 0);
+  --gradient-overlay-end:   rgba(248, 249, 246, 0.92);
+}
+
+/* ============================================================
+   THEME TOGGLE BUTTON
+   ============================================================ */
+
+.theme-toggle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  border: 1px solid var(--border-default);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: var(--theme-transition),
+              transform 0.18s ease;
+}
+
+.theme-toggle:hover {
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+  background: var(--bg-hover);
+}
+
+.theme-toggle:active {
+  transform: scale(0.96);
+}
+
+.theme-toggle__icon {
+  width: 16px;
+  height: 16px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Sun icon (visible in dark mode) */
+.theme-toggle__sun {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--matcha);
+  box-shadow: 0 0 0 2px var(--matcha) inset;
+  transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55),
+              opacity 0.3s ease;
+}
+
+.theme-toggle__sun::before,
+.theme-toggle__sun::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  background:
+    linear-gradient(0deg, var(--matcha) 0 2px, transparent 2px 100%) 50% 0/2px 100%,
+    linear-gradient(90deg, var(--matcha) 0 2px, transparent 2px 100%) 0 50%/100% 2px,
+    linear-gradient(45deg, var(--matcha) 0 2px, transparent 2px 100%) 50% 50%/2px 100%,
+    linear-gradient(135deg, var(--matcha) 0 2px, transparent 2px 100%) 50% 50%/2px 100%;
+  background-repeat: no-repeat;
+}
+
+/* Moon icon (visible in light mode) */
+.theme-toggle__moon {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--matcha);
+  box-shadow: inset -3px -2px 0 0 var(--bg-base);
+  transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55),
+              opacity 0.3s ease;
+}
+
+/* Icon visibility based on theme */
+[data-theme="dark"] .theme-toggle__sun {
+  transform: rotate(0deg) scale(1);
+  opacity: 1;
+}
+
+[data-theme="dark"] .theme-toggle__moon {
+  transform: rotate(90deg) scale(0);
+  opacity: 0;
+}
+
+[data-theme="light"] .theme-toggle__sun {
+  transform: rotate(90deg) scale(0);
+  opacity: 0;
+}
+
+[data-theme="light"] .theme-toggle__moon {
+  transform: rotate(0deg) scale(1);
+  opacity: 1;
+}
+
+.theme-toggle__label {
+  display: inline-block;
+  min-width: 32px;
+}
+
+@media (max-width: 640px) {
+  .theme-toggle__label {
+    display: none;
+  }
+  .theme-toggle {
+    padding: 8px 10px;
+    min-width: 40px;
+    justify-content: center;
+  }
+}
+
+/* ============================================================
+   THEME-AWARE COMPONENT UPDATES
+   ============================================================ */
+
+/* Body transitions */
+body {
+  transition: var(--theme-transition);
+}
+
+/* All bordered elements */
+.masthead,
+.hero,
+.ticker,
+.band,
+.tile,
+.btn,
+.chip,
+.drawer,
+.ticket {
+  transition: var(--theme-transition);
+}
+
+/* Update proximity lighting for light mode */
+[data-theme="light"] .tile__proximity-glow::before,
+[data-theme="light"] .voice__proximity-glow::before,
+[data-theme="light"] .step__proximity-glow::before {
+  background: radial-gradient(
+    var(--card-glow-size, 600px) circle at var(--cursor-x, 50%) var(--cursor-y, 50%),
+    rgba(139, 171, 45, 0.14),
+    rgba(139, 171, 45, 0.06) 30%,
+    transparent 70%
+  );
+}
+
+/* Update cursor for light mode */
+[data-theme="light"] .cursor {
+  mix-blend-mode: normal;
+  background: var(--matcha);
+}
+
+[data-theme="light"] .cursor-ring {
+  border-color: var(--matcha);
+}
+
+/* Update mesh gradients for light mode */
+[data-theme="light"] .hero::before {
+  background: radial-gradient(
+    closest-side at var(--mesh-x) var(--mesh-y),
+    rgba(139, 171, 45, 0.08),
+    transparent 72%
+  );
+}
+
+/* Update drawer backdrop for light mode */
+[data-theme="light"] .scrim {
+  background: rgba(248, 249, 246, 0.75);
+}
+
+/* Update toast notifications for light mode */
+[data-theme="light"] .achievement-toast {
+  background: var(--bg-elevated);
+  border-color: var(--border-default);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Update feature frame for light mode */
+[data-theme="light"] .feature__scrim {
+  background: linear-gradient(
+    180deg,
+    rgba(248, 249, 246, 0) 0 58%,
+    rgba(248, 249, 246, 0.85)
+  );
+}
+
+[data-theme="light"] .film__scrim {
+  background: linear-gradient(
+    180deg,
+    transparent 42%,
+    rgba(248, 249, 246, 0.90)
+  );
+}
+
+/* Update seal colors for light mode */
+[data-theme="light"] .seal circle[fill="#0A0C0A"] {
+  fill: var(--ink-deep);
+}
+
+[data-theme="light"] .seal circle[stroke="#F1F1E7"],
+[data-theme="light"] .seal text[fill="#F1F1E7"],
+[data-theme="light"] .seal g[fill="#F1F1E7"] {
+  stroke: var(--cream);
+  fill: var(--cream);
+}
+
+/* Update progress indicator for light mode */
+[data-theme="light"] .progress-bar {
+  background: var(--line);
+}
+
+[data-theme="light"] .progress-fill {
+  background: var(--matcha);
+}
+
+/* ============================================================
+   PRINT STYLES (FORCE LIGHT MODE)
+   ============================================================ */
+
+@media print {
+  :root {
+    --bg-base: #FFFFFF;
+    --text-primary: #000000;
+    --border-default: #CCCCCC;
+  }
+
+  .theme-toggle {
+    display: none !important;
+  }
+}
+
+/* ============================================================
+   REDUCED MOTION - INSTANT THEME SWITCH
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --theme-transition: none !important;
+  }
+
+  .theme-toggle__sun,
+  .theme-toggle__moon {
+    transition: opacity 0.01ms !important;
+  }
+}

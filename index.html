@@ -40,6 +40,7 @@
   ============================================================
 -->
 
+<link rel="stylesheet" href="theme-system.css">
 <link rel="stylesheet" href="bento-grid-system.css">
 <link rel="stylesheet" href="animations.css">
 <link rel="stylesheet" href="gamification-styles.css">
@@ -108,8 +109,8 @@ html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
 
 body {
   margin: 0;
-  background: var(--ink);
-  color: var(--cream);
+  background: var(--bg-base, var(--ink));
+  color: var(--text-primary, var(--cream));
   font-family: var(--sans);
   font-size: 16px;
   line-height: 1.6;
@@ -120,7 +121,9 @@ body {
   font-variation-settings:
     'wght' var(--font-weight-base),
     'slnt' var(--font-slant);
-  transition: font-variation-settings var(--font-transition-medium) var(--font-easing);
+  transition: font-variation-settings var(--font-transition-medium) var(--font-easing),
+              background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 h1, h2, h3 { margin: 0; font-weight: 400; }
@@ -1579,6 +1582,13 @@ body { cursor: none; }
       <a href="#process">How It Works</a>
       <a href="#studio">The Channel</a>
     </nav>
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+      <span class="theme-toggle__icon">
+        <span class="theme-toggle__sun"></span>
+        <span class="theme-toggle__moon"></span>
+      </span>
+      <span class="theme-toggle__label">Light</span>
+    </button>
     <button class="basket" id="basketBtn" aria-haspopup="dialog">
       Box
       <span class="basket__count" id="basketCount" data-empty="true">0</span>
@@ -3128,6 +3138,9 @@ body { cursor: none; }
   }
 })();
 </script>
+
+<!-- Theme system (load first for immediate theme application) -->
+<script src="theme-system.js"></script>
 
 <!-- Micro-animations and gamification systems -->
 <script src="animations.js"></script>
