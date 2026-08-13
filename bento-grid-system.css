@@ -1,0 +1,461 @@
+/* =============================================================================
+   NOBLE CAKE - BENTO GRID LAYOUT SYSTEM
+   =============================================================================
+
+   A modular CSS grid system with varying cell sizes for asymmetric layouts.
+   Featured items span 2x2 cells, standard items occupy 1x1 cells.
+
+   USAGE:
+   - Apply .bento-grid to the container
+   - Add .bento-grid--variant for different patterns (e.g., .bento-grid--featured-left)
+   - Apply .bento-item to each child
+   - Add .bento-item--featured for 2x2 cells
+   - Use .bento-item--wide or .bento-item--tall for 2x1 or 1x2 cells
+
+   ============================================================================= */
+
+/* -----------------------------------------------------------------------------
+   BASE GRID CONTAINER
+   ----------------------------------------------------------------------------- */
+
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: clamp(20px, 2.6vw, 34px) clamp(18px, 2.2vw, 30px);
+  transition: gap 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* -----------------------------------------------------------------------------
+   DESKTOP LAYOUT (940px+)
+   Primary bento patterns with featured 2x2 items
+   ----------------------------------------------------------------------------- */
+
+@media (min-width: 940px) {
+  /* Standard 4-column grid with featured support */
+  .bento-grid {
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: minmax(280px, auto);
+    grid-auto-flow: dense; /* Allows items to fill gaps */
+  }
+
+  /* Variant: Featured item in top-left */
+  .bento-grid--featured-left {
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-areas:
+      "hero hero card1 card2"
+      "hero hero card3 card4"
+      "card5 card6 card7 card8";
+  }
+
+  /* Variant: Featured item in top-right */
+  .bento-grid--featured-right {
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-areas:
+      "card1 card2 hero hero"
+      "card3 card4 hero hero"
+      "card5 card6 card7 card8";
+  }
+
+  /* Variant: Multiple featured items (collection view) */
+  .bento-grid--collection {
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-areas:
+      "hero1 hero1 card1 card2 hero2 hero2"
+      "hero1 hero1 card3 card4 hero2 hero2"
+      "card5 card6 card7 card8 card9 card10";
+  }
+
+  /* Variant: Asymmetric pattern (alternating) */
+  .bento-grid--asymmetric {
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-areas:
+      "hero hero card1 card2 card3"
+      "hero hero card4 tall tall"
+      "card5 card6 card7 tall tall"
+      "wide wide wide card8 card9";
+  }
+
+  /* Variant: Studio films layout */
+  .bento-grid--studio {
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: minmax(320px, auto);
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   TABLET LAYOUT (580px - 939px)
+   Simplified 2-column grid with featured items
+   ----------------------------------------------------------------------------- */
+
+@media (min-width: 580px) and (max-width: 939px) {
+  .bento-grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: minmax(260px, auto);
+    gap: clamp(18px, 3vw, 28px) clamp(16px, 2.5vw, 24px);
+  }
+
+  /* Simplified areas for tablet */
+  .bento-grid--featured-left,
+  .bento-grid--featured-right,
+  .bento-grid--collection,
+  .bento-grid--asymmetric {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-areas:
+      "hero hero"
+      "hero hero"
+      "card1 card2"
+      "card3 card4";
+  }
+
+  .bento-grid--studio {
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: minmax(280px, auto);
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   MOBILE LAYOUT (< 580px)
+   Single column stack with optional wide featured items
+   ----------------------------------------------------------------------------- */
+
+@media (max-width: 579px) {
+  .bento-grid {
+    grid-template-columns: 1fr;
+    grid-auto-rows: auto;
+    gap: clamp(16px, 4vw, 24px);
+  }
+
+  /* All variants stack on mobile */
+  .bento-grid--featured-left,
+  .bento-grid--featured-right,
+  .bento-grid--collection,
+  .bento-grid--asymmetric,
+  .bento-grid--studio {
+    grid-template-columns: 1fr;
+    grid-template-areas: none;
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   GRID ITEMS
+   ----------------------------------------------------------------------------- */
+
+.bento-item {
+  position: relative;
+  min-height: 280px;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.3s ease;
+}
+
+/* Featured item: spans 2x2 on desktop */
+.bento-item--featured {
+  grid-column: span 2;
+  grid-row: span 2;
+  min-height: 580px;
+}
+
+/* Wide item: spans 2 columns, 1 row */
+.bento-item--wide {
+  grid-column: span 2;
+  grid-row: span 1;
+}
+
+/* Tall item: spans 1 column, 2 rows */
+.bento-item--tall {
+  grid-column: span 1;
+  grid-row: span 2;
+  min-height: 580px;
+}
+
+/* Named grid areas (for variant layouts) */
+.bento-item[data-area="hero"],
+.bento-item[data-area="hero1"],
+.bento-item[data-area="hero2"] {
+  grid-area: var(--area);
+}
+
+/* Apply areas via custom property */
+.bento-item[data-area="hero"] { --area: hero; }
+.bento-item[data-area="hero1"] { --area: hero1; }
+.bento-item[data-area="hero2"] { --area: hero2; }
+.bento-item[data-area="tall"] { --area: tall; }
+.bento-item[data-area="wide"] { --area: wide; }
+
+/* Tablet: Featured items span 2 columns */
+@media (min-width: 580px) and (max-width: 939px) {
+  .bento-item--featured {
+    grid-column: span 2;
+    grid-row: span 2;
+    min-height: 480px;
+  }
+
+  .bento-item--wide {
+    grid-column: span 2;
+  }
+
+  .bento-item--tall {
+    grid-column: span 1;
+    grid-row: span 2;
+    min-height: 480px;
+  }
+}
+
+/* Mobile: All items single column */
+@media (max-width: 579px) {
+  .bento-item--featured,
+  .bento-item--wide,
+  .bento-item--tall {
+    grid-column: span 1;
+    grid-row: span 1;
+    min-height: 340px;
+  }
+
+  .bento-item--featured {
+    min-height: 420px;
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   ITEM STATES & INTERACTIONS
+   ----------------------------------------------------------------------------- */
+
+.bento-item:hover {
+  transform: translateY(-2px);
+}
+
+.bento-item--featured:hover {
+  transform: translateY(-4px);
+}
+
+/* Loading state */
+.bento-item[data-loading="true"] {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Empty state */
+.bento-item--empty {
+  border: 2px dashed var(--line, #262B23);
+  background: transparent;
+  min-height: 280px;
+  display: grid;
+  place-items: center;
+  color: var(--muted, #8D958A);
+}
+
+/* -----------------------------------------------------------------------------
+   CONTENT WRAPPERS FOR BENTO ITEMS
+   ----------------------------------------------------------------------------- */
+
+/* Card wrapper inside bento item */
+.bento-item__content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Image/media container */
+.bento-item__media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  flex: none;
+}
+
+.bento-item--featured .bento-item__media {
+  aspect-ratio: 16 / 9;
+}
+
+.bento-item--wide .bento-item__media {
+  aspect-ratio: 16 / 9;
+}
+
+.bento-item--tall .bento-item__media {
+  aspect-ratio: 9 / 16;
+}
+
+/* Body content */
+.bento-item__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding-top: 16px;
+}
+
+/* -----------------------------------------------------------------------------
+   RESPONSIVE TRANSITIONS
+   Smooth animations when breakpoints change
+   ----------------------------------------------------------------------------- */
+
+.bento-grid,
+.bento-item {
+  transition:
+    grid-template-columns 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    grid-template-rows 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    gap 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    min-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Disable transitions for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .bento-grid,
+  .bento-item {
+    transition: none;
+  }
+
+  .bento-item:hover,
+  .bento-item--featured:hover {
+    transform: none;
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   UTILITY CLASSES
+   ----------------------------------------------------------------------------- */
+
+/* Force item into specific grid position */
+.bento-item--col-start-1 { grid-column-start: 1; }
+.bento-item--col-start-2 { grid-column-start: 2; }
+.bento-item--col-start-3 { grid-column-start: 3; }
+.bento-item--col-start-4 { grid-column-start: 4; }
+
+.bento-item--row-start-1 { grid-row-start: 1; }
+.bento-item--row-start-2 { grid-row-start: 2; }
+.bento-item--row-start-3 { grid-row-start: 3; }
+
+/* Hide on specific breakpoints */
+.bento-item--hide-mobile {
+  @media (max-width: 579px) {
+    display: none;
+  }
+}
+
+.bento-item--hide-tablet {
+  @media (min-width: 580px) and (max-width: 939px) {
+    display: none;
+  }
+}
+
+.bento-item--hide-desktop {
+  @media (min-width: 940px) {
+    display: none;
+  }
+}
+
+/* Show only on specific breakpoints */
+.bento-item--show-mobile {
+  display: none;
+  @media (max-width: 579px) {
+    display: block;
+  }
+}
+
+.bento-item--show-tablet {
+  display: none;
+  @media (min-width: 580px) and (max-width: 939px) {
+    display: block;
+  }
+}
+
+.bento-item--show-desktop {
+  display: none;
+  @media (min-width: 940px) {
+    display: block;
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   SPECIFIC NOBLE CAKE IMPLEMENTATIONS
+   ----------------------------------------------------------------------------- */
+
+/* Collection Grid - Optimized for cake tiles */
+.bento-grid--cakes {
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+@media (min-width: 940px) {
+  .bento-grid--cakes {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  /* First item (featured) spans 2x2 */
+  .bento-grid--cakes > .bento-item:first-child {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+}
+
+@media (min-width: 580px) and (max-width: 939px) {
+  .bento-grid--cakes {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* First item spans 2 columns on tablet */
+  .bento-grid--cakes > .bento-item:first-child {
+    grid-column: span 2;
+    grid-row: span 1;
+  }
+}
+
+/* Films Grid - Optimized for video thumbnails */
+.bento-grid--films {
+  grid-auto-rows: minmax(320px, auto);
+}
+
+@media (min-width: 940px) {
+  .bento-grid--films {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  /* Featured film spans 2x2 */
+  .bento-grid--films > .bento-item--featured {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+}
+
+@media (min-width: 580px) and (max-width: 939px) {
+  .bento-grid--films {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   ANIMATION CLASSES
+   Stagger animations for grid items
+   ----------------------------------------------------------------------------- */
+
+.bento-grid--animate .bento-item {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: bento-fade-in 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Stagger delay for each item */
+.bento-grid--animate .bento-item:nth-child(1) { animation-delay: 0ms; }
+.bento-grid--animate .bento-item:nth-child(2) { animation-delay: 80ms; }
+.bento-grid--animate .bento-item:nth-child(3) { animation-delay: 160ms; }
+.bento-grid--animate .bento-item:nth-child(4) { animation-delay: 240ms; }
+.bento-grid--animate .bento-item:nth-child(5) { animation-delay: 320ms; }
+.bento-grid--animate .bento-item:nth-child(6) { animation-delay: 400ms; }
+.bento-grid--animate .bento-item:nth-child(7) { animation-delay: 480ms; }
+.bento-grid--animate .bento-item:nth-child(8) { animation-delay: 560ms; }
+.bento-grid--animate .bento-item:nth-child(9) { animation-delay: 640ms; }
+.bento-grid--animate .bento-item:nth-child(10) { animation-delay: 720ms; }
+
+@keyframes bento-fade-in {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bento-grid--animate .bento-item {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+}
