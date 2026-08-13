@@ -1260,8 +1260,16 @@ img { max-width: 100%; display: block; }
   --parallax-transition: transform 0.6s cubic-bezier(0.16, 0.84, 0.44, 1);
 }
 
-/* Custom cursor */
-body { cursor: none; }
+/* Custom cursor - hide default cursor everywhere */
+body,
+body *,
+a,
+button,
+input,
+textarea,
+select {
+  cursor: none !important;
+}
 
 .cursor {
   position: fixed;
@@ -1273,11 +1281,10 @@ body { cursor: none; }
   z-index: 99999;
   mix-blend-mode: normal;
   transform: translate(-50%, -50%);
-  transition: width 0.2s ease, height 0.2s ease, opacity 0.2s ease;
-  opacity: 0;
+  transition: width 0.2s ease, height 0.2s ease, opacity 0.2s ease, background 0.2s ease;
+  opacity: 1;
+  will-change: transform;
 }
-
-.cursor.visible { opacity: 1; }
 
 /* Light mode cursor adjustment */
 [data-theme="light"] .cursor {
@@ -1297,10 +1304,9 @@ body { cursor: none; }
   transition: width 0.3s cubic-bezier(0.16, 0.84, 0.44, 1),
               height 0.3s cubic-bezier(0.16, 0.84, 0.44, 1),
               opacity 0.2s ease;
-  opacity: 0;
+  opacity: 0.5;
+  will-change: transform;
 }
-
-.cursor-ring.visible { opacity: 0.5; }
 
 /* Ensure cursor stays on top of sticky elements */
 .masthead,
@@ -2923,9 +2929,18 @@ body { cursor: none; }
     document.body.appendChild(cursor);
     document.body.appendChild(cursorRing);
 
-    var mouseX = 0, mouseY = 0;
-    var cursorX = 0, cursorY = 0;
-    var ringX = 0, ringY = 0;
+    var mouseX = window.innerWidth / 2;
+    var mouseY = window.innerHeight / 2;
+    var cursorX = mouseX;
+    var cursorY = mouseY;
+    var ringX = mouseX;
+    var ringY = mouseY;
+
+    // Initialize position
+    cursor.style.left = cursorX + "px";
+    cursor.style.top = cursorY + "px";
+    cursorRing.style.left = ringX + "px";
+    cursorRing.style.top = ringY + "px";
 
     document.addEventListener("mousemove", function (e) {
       mouseX = e.clientX;
@@ -2933,10 +2948,7 @@ body { cursor: none; }
 
       document.documentElement.style.setProperty("--cursor-x-px", e.clientX + "px");
       document.documentElement.style.setProperty("--cursor-y-px", e.clientY + "px");
-
-      cursor.classList.add("visible");
-      cursorRing.classList.add("visible");
-    });
+    }, { passive: true });
 
     function animateCursor() {
       cursorX += (mouseX - cursorX) * 0.25;
@@ -2952,16 +2964,6 @@ body { cursor: none; }
       requestAnimationFrame(animateCursor);
     }
     animateCursor();
-
-    document.addEventListener("mouseleave", function () {
-      cursor.classList.remove("visible");
-      cursorRing.classList.remove("visible");
-    });
-
-    document.addEventListener("mouseenter", function () {
-      cursor.classList.add("visible");
-      cursorRing.classList.add("visible");
-    });
   }
 
   function initProximityLighting() {
